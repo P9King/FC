@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<head>
+    <link th:href="@{/css/joinForm.css}" rel="stylesheet">
+    <style>
+        .content {
+            text-align: -webkit-center;
+        }
+        .textinput {
+            border : black solid 1px;
+            border-radius: 7px;
+            width: 300px;
+            height: 35px;
+        }
+
+        .textlabel {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .register {
+            height: 70px;
+        }
+
+        .btnbtn {
+            background: gray;
+            color: white;
+            font-size: 12px;
+        }
+
+        .addrtext {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 120px; font-size: 15px
+        }
+
+        .addrtext2 {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 300px; font-size: 15px
+        }
+
+    </style>
+
+</head>
+
+<div layout:fragment="content">
+    <form action="/modify" method="post" id="memberModify">
+        <table width="800">
+            <tr height="40">
+                <td align="center" style="font-size: 30px;"><b>개인 회원수정</b></td>
+            </tr>
+            <tr>
+                <td align="right" style="color: gray"><b>* 필수 입력 사항</b></td>
+            </tr>
+        </table>
+        <table width="700" height="600" cellpadding="0" style="border-collapse:collapse; font-size:16px;margin-left: 120px;">
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">Email</td>
+                <input type="hidden" name="id" th:value="${session.memberLogin.id}" }>
+                <td><input class="textinput" th:value="${session.memberLogin.email}" type="text" name="email"/>&nbsp;
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">닉네임</td>
+                <td><input class="textinput"  th:value="${session.memberLogin.nickName}" type="text" name="nickName" required/>&nbsp;
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">비밀번호</td>
+                <td><input class="textinput"  th:value="${session.memberLogin.password}" type="password" name="password" id="pw"/></td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">비밀번호 확인</td>
+                <td><input class="textinput" type="password" name="" id="pwCheck"/>&nbsp;&nbsp;<span
+                        id="same"></span></td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">이 름</td>
+                <td><input class="textinput" th:value="${session.memberLogin.name}" type="text" name="name"/></td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">성 별</td>
+                <td style="font-size: 15px; font-weight: bold">
+                    남 성 &nbsp<input type="radio" name="gender" value="남자" checked/>&nbsp
+                    여 성 &nbsp<input type="radio" name="gender" value="여자"/>
+                </td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">생년월일</td>
+                <td><input class="textinput" th:value="${session.memberLogin.birth}" type="tel" name=""/></td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">휴대전화</td>
+                <td><input class="textinput" th:value="${session.memberLogin.phone}" type="tel" name="phone"/></td>
+            </tr>
+            <tr>
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">주 소</td>
+                <td>
+                    <input class="addrtext" type="text" size="10" name="addr" id="postcode" placeholder="우편번호"
+                           readonly="readonly">
+                    <input class="btn btn-secondary btnbtn" type="button" value="우편번호 찾기"><br><br/>
+                    <input class="addrtext2" type="text" size="30" name="wRoadAddress" id="roadAddress" placeholder="도로명주소"
+                           readonly="readonly">
+                    <br/><span id="guide" style="color:#999;font-size:10px;"></span>
+                    <br/><input class="addrtext2" th:value="${session.memberLogin.addr}" type="text" name="wRestAddress"
+                                     placeholder="나머지 주소" size="70"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <span>
+            <input type="hidden" name="role" value="일반"/>
+        <!-- href 로 경로를 지정해줄때는 controller로 매핑시켜놓은것으로 적어준다-->
+            <button style="position: absolute; margin-left: -150px;" type="submit" class="btn btn-success" form="memberModify">수정하기</button>
+        </span>
+    <span>
+            <form action="/delete" method="post">
+
+                <input type="hidden" name="id" th:value="${session.memberLogin.id}"}>
+                <button style="position: relative; margin-left: 200px"  class="btn btn-danger">탈퇴하기</button>
+            </form>
+    </span>
+</div>
+</html>

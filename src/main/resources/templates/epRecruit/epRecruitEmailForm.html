@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<div layout:fragment="content">
+    <div class="container">
+        <form id="form" method="post" enctype="multipart/form-data" onsubmit="return false">
+            <div class="row mb-3">
+                <div><input type="hidden" name="toEmail" th:value="${writerInfo.email}"/></div>
+                <label class="col-sm-2 col-form-label" for="inpTitle">지원 추천서</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inpTitle" type="text" name="title" value="OO기업 지원 추천서" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="career">필요경력</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="career" type="text" name="career" placeholder="경력기간 기입">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="myStack">기술스택</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="myStack" type="text" name="myStack"
+                           placeholder="java, javscript, etc...">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="myFramework">프레임 워크</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="myFramework" type="text" name="myFramework"
+                           placeholder="eclipse, intelliJ, etc...">
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-form-label col-sm-2 pt-0" for="payment">계약금/기간</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input class="form-control" id="payment" type="number" name="payment">
+                        <span class="input-group-text" style="margin-right: 2px">만원</span>
+                        <input class="form-control" id="contractPeriod" type="text" name="contractPeriod">
+                        <span class="input-group-text">개월</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="myEmail">이메일/연락처</label>
+                <div class="col-sm-10" style="display: flex;">
+                    <div class="input-group" style="margin-right: 2px">
+                        <input class="form-control" id="myEmail" type="text" name="myEmail" th:value="${session.memberLogin.email}"
+                               placeholder="이메일을 입력해 주세요." required>
+                    </div>
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="frontPh" style="color: gray" placeholder="010"
+                               required>
+                        <input class="form-control" type="text" name="middlePh" style="color: gray" placeholder="1234"
+                               required>
+                        <input class="form-control" type="text" name="lastPh" style="color: gray" placeholder="5678"
+                               required>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="detail">상세요강</label>
+                <div class="col-sm-10">
+                    <textarea id="detail" type="text" th:class="form-control" name="detail"></textarea>
+                </div>
+            </div>
+            <input class="form-control" type="file" id="file" name="file" accept=".jpg, .jpeg, .png" hidden="hidden"/>
+            <div style="display: flex; justify-content: end;">
+                <button type="button" class="btn btn-dark" onclick="sendEmail()">이력서 전송</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Content Page의 CSS fragment 삽입 -->
+    <th:block layout:fragment="css">
+        <link th:rel="stylesheet" th:href="@{/css/summernote/summernote-lite.min.css}">
+    </th:block>
+
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/summernote/summernote-lite.min.js}"></script>
+        <script th:src="@{/js/summernote/lang/summernote-ko-KR.min.js}"></script>
+        <script th:inline="javascript">
+
+            $('#detail').summernote({
+                // 에디터 높이
+                height: 500,
+                // 에디터 한글 설정
+                lang: "ko-KR",
+                // 에디터에 커서 이동 (input창의 autofocus라고 생각)
+                focus: false,
+                placeholder: '최대 2048자까지 쓸 수 있습니다',
+                toolbar: [
+                    // 글자 크기 설정
+                    ['style', ['style']],
+                    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    // 글자색
+                    ['color', ['forecolor', 'color']],
+                    // 표만들기
+                    ['table', ['table']],
+                    // 글머리 기호, 번호매기기, 문단정렬
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    // 줄간격
+                    ['height', ['height']],
+                    // 링크, 사진, 비디오
+                    ['insert', ['link', 'picture', 'video']],
+                    // 코드보기, 확대해서보기, 도움말
+                    ['view', ['help']]
+                ],
+                callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                    onImageUpload: function (files) {
+                        uploadSummernoteImageFile(files[0], this);
+                    },
+                    onPaste: function (e) {
+                        var clipboardData = e.originalEvent.clipboardData;
+                        if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                            var item = clipboardData.items[0];
+                            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                }
+            });
+
+            /**
+             * 이미지 파일 업로드
+             */
+            function uploadSummernoteImageFile(file, editor) {
+                let data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data: data,
+                    type: "POST",
+                    url: "/jobHunting/uploadSummernoteImageFile",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        //항상 업로드된 파일의 url이 있어야 한다.
+
+                        console.log(data.url)
+                        $(editor).summernote('insertImage', data.url);
+                    }
+                });
+            }
+
+            //이메일 처리(SMTP)는 오래걸리기 때문에 promoise로 처리
+            async function sendEmail() {
+                //   'multipart/form-data'
+                let data = document.getElementById('form');
+                let formData = new FormData(data);
+                let payload = new URLSearchParams(formData);
+
+                console.log('btn clicked');
+                fetch("/epRecruit/sendEmail", {
+                    headers: {
+                        contentType: false,
+                        processData: false,
+                    },
+                    method: "POST",
+                    body: payload,
+                }).then(result => {
+                        alert(result);
+                        location.href = "/";
+                });
+            }
+
+        </script>
+    </th:block>
+</div>
+</html>

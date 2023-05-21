@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <link th:href="@{/css/loginForm.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/089f36b7b1.js"></script>
+    <style>
+        .JoinBox_sign-box-wrap__oL_93 {
+            display: flex;
+            margin: 200px 150px 0px 150px;
+            height: 535px;
+            align-items: center;
+            padding: 40px 0;
+            flex-direction: column;
+        }
+
+        .Button_button__S9rjD.Button_contained__DJSrI.Button_large___Kecx {
+            padding: 11px 27px;
+            line-height: 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+        }
+
+        .Button_button__S9rjD {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: .875rem;
+            border: 1px solid transparent;
+            font-weight: 500;
+            line-height: 16px;
+        }
+
+        .Button_button__S9rjD.Button_primary__5usVQ {
+            color: #fff;
+            background-color: #ff501b;
+            border: 1px solid #ff501b;
+        }
+        .Button_button__S9rjD.Button_black__2wwfV {
+            color: #fff;
+            background-color: #171717;
+            border: 1px solid #171717;
+        }
+
+    </style>
+</head>
+
+
+<div layout:fragment="content">
+    <div class="d-flex justify-content-center">
+        <div class="JoinBox_sign-box-wrap__oL_93">
+            <div class="JoinBox_sign-title-wrap__UZVNn"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">구직 게시글을 등록하고 회사를 찾아보세요</span>
+            </div>
+            <div class="JoinBox_sign-logo-wrap__yQDr_"><span
+                    style="box-sizing: border-box; display: inline-block; overflow: hidden; width: 294px; height: 180px; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative;"><img
+                    src="https://contents.albamon.kr/monimg/msa/images/account/join_member.svg" decoding="async"
+                    data-nimg="fixed"
+                    srcset="https://contents.albamon.kr/monimg/msa/images/account/join_member.svg 1x, https://contents.albamon.kr/monimg/msa/images/account/join_member.svg 2x"
+                    style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"><noscript></noscript></span>
+            </div>
+            <div class="JoinBox_sign-button-wrap__gcaNY"><a
+                    class="Button_button__S9rjD Button_contained__DJSrI Button_large___Kecx Button_primary__5usVQ"
+                    target="_self" href="/insert"><span
+                    class="Typography_typography__53V55 Typography_typography--B1__O3FkV Typography_typography--medium__EuyrE">개인회원 가입</span></a>
+            </div>
+
+        </div>
+        <div class="JoinBox_sign-box-wrap__oL_93">
+            <div class="JoinBox_sign-title-wrap__UZVNn"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">구인 게시글을 등록하고 인재를 찾아보세요</span>
+            </div>
+            <div class="JoinBox_sign-logo-wrap__yQDr_"><span
+                    style="box-sizing: border-box; display: inline-block; overflow: hidden; width: 294px; height: 180px; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative;"><img
+                    src="https://contents.albamon.kr/monimg/msa/images/account/join_corp.svg" decoding="async"
+                    data-nimg="fixed"
+                    srcset="https://contents.albamon.kr/monimg/msa/images/account/join_corp.svg 1x, https://contents.albamon.kr/monimg/msa/images/account/join_corp.svg 2x"
+                    style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"><noscript></noscript></span>
+            </div>
+            <div class="JoinBox_sign-button-wrap__gcaNY"><a
+                    class="Button_button__S9rjD Button_contained__DJSrI Button_large___Kecx Button_black__2wwfV"
+                    target="_self" href="/epInsert"><span
+                    class="Typography_typography__53V55 Typography_typography--B1__O3FkV Typography_typography--medium__EuyrE">기업회원 가입</span></a>
+            </div>
+            <div class="JoinBox_sign-sub-area-wrap__b1_4G">
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>

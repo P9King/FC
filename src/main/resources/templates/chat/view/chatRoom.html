@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            height: 700px;
+        }
+
+        div {
+            border: solid black 1px;
+        }
+
+        .memRoomList {
+            width: 45%;
+        }
+
+
+        .epRoomList {
+            width: 45%;
+        }
+
+    </style>
+</head>
+<div layout:fragment="content" class="container wrapper">
+    <div class="memRoomList">
+        일반 채팅 리스트
+        <ul th:if="${memberList}==0">
+       <!-- <ul th:if="|${memberList}==문의 내용이 없습니다.|">-->
+            메세지가 없습니다.
+        </ul>
+
+        <ul th:if="${memberList}">
+            <li th:each="mlist: ${memberList}"><a
+                    th:href="@{/memberChat/enterMemberRoom/}+|${mlist.chatRoom}?memberRoom=${mlist.chatRoom}|">
+                회원번호: [[${mlist.chatRoom}]]<br>
+                문의내역 : [[${mlist.chatDetail}]]</a></li>
+        </ul>
+    </div>
+
+
+    <div class="epRoomList">
+      <ul th:if="${epList}==0">
+            메세지가 없습니다.
+        </ul>
+
+        <ul th:if="${epList}">
+            기업회원 채팅 리스트
+            <li th:each="eList: ${epList}"><a th:href="@{/epChat/enterEpRoom/}+|${eList.chatRoom}?epRoom=${eList.chatRoom}|">
+                기업번호 : [[${eList.chatRoom}]] <br>
+                문의내역 : [[${eList.chatDetail}]]
+            </a></li>
+
+        </ul>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:inline="javascript">
+
+        let memberVo;
+        let epVo;
+        let msgForm = document.querySelector("#msgForm");
+        let message = document.querySelector(".msgContent");
+        let stompClient = null;
+        let memberli = document.querySelector('.memberli');
+
+        /*roomId 관련*/
+        if ([[${session.epLogin}]]) {
+            epVo = [[${session.epLogin}]];
+            roomId = epVo.epId;
+        } else if ([[${session.memberLogin}]]) {
+            memberVo = [[${session.memberLogin}]];
+            roomId = memberVo.id;
+            console.log(roomId);
+        }
+    </script>
+</th:block>
+</html>

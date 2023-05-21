@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<head>
+    <link th:href="@{/css/joinForm.css}" rel="stylesheet">
+    <style>
+        .content {
+            text-align: -webkit-center;
+        }
+        .textinput {
+            border : black solid 1px;
+            border-radius: 7px;
+            width: 300px;
+            height: 35px;
+        }
+
+        .textlabel {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .register {
+            height: 70px;
+        }
+
+        .btnbtn {
+            background: gray;
+            color: white;
+            font-size: 12px;
+        }
+
+        .addrtext {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 120px; font-size: 15px
+        }
+
+        .addrtext2 {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 300px; font-size: 15px
+        }
+
+    </style>
+</head>
+<div layout:fragment="content">
+    <form action="/insert" method="post">
+        <table width="800">
+            <tr height="40">
+                <td align="center" style="font-size: 30px;"><b>개인 회원가입</b></td>
+            </tr>
+            <tr>
+                <td align="right" style="color: gray"><b>* 필수 입력 사항</b></td>
+            </tr>
+        </table>
+        <table width="700" height="600" cellpadding="0" style="border-collapse:collapse; font-size:16px; margin-left: 120px" >
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">Email</td>
+                <td><input class="textinput" type="text" oninput="emailCheckReset()" name="email" placeholder=" user@example.com" id="email" required/>&nbsp;
+                    <input type="button" id="btnCheck" class="btn btn-secondary btnbtn" value="중복체크"/>
+                    <span id="result"></span>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">닉네임</td>
+                <td><input class="textinput"  type="text" name="nickName"  required/>&nbsp;
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호</td>
+                <td><input class="textinput" type="password" name="password" id="pw"/></td>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호 확인</td>
+                <td><input class="textinput" type="password" name="" id="pwCheck"/>&nbsp;&nbsp;<span
+                        id="same"></span></td>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">이 름</td>
+                <td><input class="textinput" type="text" name="name"/></td>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">성 별</td>
+                <td style="font-size: 15px; font-weight: bold">
+                    남 성 &nbsp<input type="radio" name="gender" value="남자" checked/>&nbsp
+                    여 성 &nbsp<input type="radio" name="gender" value="여자"/>
+                </td>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">생년월일</td>
+                <td><input class="textinput" type="tel" name=""/></td>
+            </tr>
+            <tr class="register">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">휴대전화</td>
+                <td><input class="textinput" type="tel" name="phone"/></td>
+            </tr>
+                <tr>
+                    <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                    <td class="textlabel" width="15%">주 소</td>
+                    <td>
+
+                        <input class="addrtext" type="text" size="10" name="addr" id="sample4_postcode" placeholder="     우편번호" readonly="readonly" >
+                        <input class="btn btn-secondary btnbtn"  type="button" onclick="searchAddr()" value="주소찾기"><br><br>
+                        <!--          <input type="button" onclick="window.open('/addrSearch' ,' _blank','width=569, height=553,top=300,left=600 '); return false;" value="주소찾기"><br>-->
+                        <input class="addrtext2" type="text" size="30" name="wRoadAddress" id="sample4_roadAddress" placeholder="  도로명주소"
+                               readonly="readonly" >
+                        <br/><span id="guide" style="color:#999;font-size:10px;"></span>
+                        <br/><input class="addrtext2" type="text" name="wRestAddress" placeholder="  나머지 주소" size="70"/>
+
+                    </td>
+                </tr>
+        </table>
+        <br/>
+        <table>
+            <tr height="40">
+                <td>
+                     <input type="hidden" name="role" value="member"/>
+                    <!-- href 로 경로를 지정해줄때는 controller로 매핑시켜놓은것으로 적어준다-->
+                    <button style="width: 300px;" id="submitBtn" type="submit" class="btn btn-success" >가입하기</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</html>
+<script>
+    function searchAddr() {
+        var childWindow = window.open("addrSearch", "Child Window", "width=400,height=300");
+        return false;
+    }
+    function receiveAddressValues(roadAddr, zipNo) {
+        // Set the received address values in the parent window
+        document.getElementById("sample4_postcode").value = zipNo;
+        document.getElementById("sample4_roadAddress").value = roadAddr;
+
+    }
+
+
+    let idck = 0;
+
+    function emailCheckReset() {
+        idck = 0;
+    }
+
+
+
+    $('#btnCheck').click(function () {
+        /*이메일 중복검사 할 이메일값 value값*/
+        let email = $('#email').val();
+
+        if ($('#email').val() != '') {
+            let regEmail = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+            console.log('@@@')
+
+            // 아이디를 서버로 전송 > DB 유효성 검사 > 결과 반환받기
+            $.ajax({
+
+                type: 'GET',
+                url: '/mIdCheck',
+                /*보낼 데이터 : {파라미터이름 : 실제 데이터값(=위의 이메일) } */
+                data: {email : email},
+                dataType: 'json',/*받는타입*/
+                success: function(result) {
+                    if(!regEmail.test(email)){
+                        $('#result').text("이메일이 유효하지 않습니다.");}
+                    else{
+
+                        if (result == '0') {
+                            $('#result').text('사용 가능한 아이디입니다.');
+                            //아이디가 중복하지 않으면  idck = 1
+                            idck = 1;
+                        }else{
+                            $('#result').text('이미 사용중인 아이디입니다.');
+
+                        }
+                    }},
+
+                error: function(a, b, c) {
+                    console.log(a, b, c);
+                }
+
+            });
+
+        } else {
+            alert('아이디를 입력하세요.');
+            $('#email').focus();
+        }
+
+    });
+    // 회원가입 버튼에 아이디를 맞춰줌
+    $('#submitBtn').click(function () {
+        if(confirm("회원가입을 하시겠습니까?")) {
+            if (idck == 0) {
+                alert('아이디 정보를 확인 해주세요');
+            } else {
+                alert("회원가입을 축하합니다");
+                $("#submitBtn").submit();}
+        }else {
+            return false;
+        }
+    });
+
+
+
+
+
+</script>
+

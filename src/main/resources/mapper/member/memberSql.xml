@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.member.memberDao.MemberDao">
+
+
+<!--    select문은 ResultSet이 리턴되며, ResultSet에 저장된 검색결과를 어떤 자바객체에 매핑할지 지정해야한다.-->
+<!--    따라서 반드시 resultType 속성을 넣어주어야한다-->
+ <!--   이 resultType 속성은 당연히 쿼리 명령어가 등록되는 SELECT엘리먼트에서만 사용할 수 있고 절대 생략할 수 없는 속성이다.
+     parameterType은 생략이 가능.-->
+    <select id="doMemberList" resultType="com.example.fc.member.memberVo.MemberVo">
+        select * from member;
+    </select>
+    
+
+    <!-- 멤버 회원가입 insert -->
+    <insert id="memberJoin" parameterType="com.example.fc.member.memberVo.MemberVo">
+        insert into member(name,email,password,addr,phone,gender,birth,role,nickName)
+        values (#{name}, #{email},#{password},#{addr},#{phone},#{gender},#{birth},#{role},#{nickName});
+    </insert>
+    
+    <!-- 멤버 수정 modify -->
+    <update id="memberModify" parameterType="com.example.fc.member.memberVo.MemberVo">
+        update member set name=#{name},email=#{email},password=#{password},addr=#{addr},phone=#{phone},birth=#{birth},nickName=#{nickName} where id = #{id};
+    </update>
+
+    <!-- 멤버 탈퇴-->
+    <delete id="memberDelete">
+        delete from member where id = #{id}
+    </delete>
+
+    <!-- 로그인 -->
+    <select id="memberLogin" resultType="com.example.fc.member.memberVo.MemberVo">
+        select id,name,addr,phone,gender,birth,role,email,nickName,password, email_verified from member where email = #{email} and password = #{password};
+    </select>
+
+    <!--중복체크-->
+    <select id="idCheck" parameterType="com.example.fc.member.memberVo.MemberVo" resultType="java.lang.Integer">
+        select count(*) From member where email =#{email}
+    </select>
+
+    <!--비밀번호 찾기-->
+    <select id="memberPasswordCheck" resultType="com.example.fc.member.memberVo.MemberVo">
+        select password,email,name From member where email = #{email} and name = #{name};
+    </select>
+
+    <!--      이메일 찾기-->
+    <select id="memberEmailCheck" resultType="com.example.fc.member.memberVo.MemberVo">
+        select password, name,email From member where name = #{name} and phone = #{phone};
+    </select>
+
+    <!--이메일 인증-->
+    <update id="emailVerified" parameterType="com.example.fc.member.memberVo.MemberVo">
+        UPDATE member SET email_verified =1 where email=#{email} AND password =#{password}
+    </update>
+
+</mapper>

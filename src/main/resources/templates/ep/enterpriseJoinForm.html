@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+available
+<head>
+    <style>
+        .content {
+            justify-content: center;
+            text-align: center;
+            text-align: -webkit-center;
+        }
+
+        .textinput {
+            border: black solid 1px;
+            border-radius: 7px;
+            width: 300px;
+            height: 35px;
+        }
+
+        .textlabel {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .register {
+            height: 70px;
+        }
+
+        .btnbtn {
+            background: gray;
+            color: white;
+            font-size: 12px;
+        }
+
+        .addrtext {
+            border-radius: 7px;
+            border: solid black 1px;
+            height: 30px;
+            width: 120px;
+            font-size: 15px
+        }
+
+        .addrtext2 {
+            border-radius: 7px;
+            border: solid black 1px;
+            height: 30px;
+            width: 300px;
+            font-size: 15px
+        }
+
+    </style>
+</head>
+
+<div layout:fragment="content">
+    <form action="/epInsert" method="post" id="registerSubmit">
+        <input type="hidden" name="name" id="sName">
+        <input type="hidden" name="content" id="sContent">
+        <input type="hidden" name="password" id="sPassword">
+        <input type="hidden" name="addr" id="sAddr">
+        <input type="hidden" name="phone" id="sPhone">
+        <input type="hidden" name="bnNumber" id="sBnNumber">
+        <input type="hidden" name="email" id="sEmail">
+        <input type="hidden" value="ep" name="role">
+
+        <table width="800">
+            <tr height="40">
+                <td align="center" style="font-size: 30px;"><b>기업 회원 가입</b></td>
+            </tr>
+            <tr>
+                <td align="right" style="color: gray"><b>* 필수 입력 사항</b></td>
+            </tr>
+        </table>
+        <table width="700" height="600" cellpadding="0"
+               style="border-collapse:collapse; font-size:9pt; margin-left: 120px">
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">Email</td>
+                <!--        oninput은 클릭할때 마다 함수를 실행하는 속성-->
+                <td>
+                    <input class="textinput" oninput="emailCheckReset()" type="text" id="email"
+                           placeholder=" user@example.com" required/>&nbsp;
+                    <!--          <a><button id="epIdCheck" class="btn btn-primary" onclick="confirmId(event)">중복확인</button></a></td>-->
+                    <!--          <input type="button" id="btnCheck" class="btn btn-secondary btnbtn" value="중복체크"/>-->
+                    <span id="result"></span>
+                </td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호</td>
+                <td><input class="textinput" type="password" id="pw" required/></td>
+            </tr>
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호 확인</td>
+                <td><input class="textinput" type="password" id="pwCheck"/>&nbsp;&nbsp;<span
+                        id="same"></span></td>
+            </tr>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">기 업 명</td>
+                <td>
+                    <input class="textinput" type="text" id="name" oninput="nameCheck();" required/>
+                    <span id="chkName"></span>
+                </td>
+            </tr>
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">사업자 번호</td>
+                <td><input class="textinput" type="text" placeholder=" '-'없이 숫자만 10자 입력" oninput="bnNumCheck()" id="bnNumber"/></td>
+            </tr>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">대표 번호</td>
+                <td><input class="textinput" type="tel" id="phone" placeholder=" 대표 번호 '-'제외하고 입력" oninput="bnPhoneCheck()"/></td>
+            </tr>
+            <tr>
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">회 사 주 소</td>
+                <td>
+
+                    <input class="addrtext" type="text" size="10" id="zipNo"
+                           placeholder="     우편번호" readonly="readonly">
+                    <input class="btn btn-secondary btnbtn" type="button" onclick="searchAddr()" value="주소찾기"><br><br>
+                    <!--          <input type="button" onclick="window.open('/addrSearch' ,' _blank','width=569, height=553,top=300,left=600 '); return false;" value="주소찾기"><br>-->
+                    <input class="addrtext2" type="text" size="30" id="addr"
+                           placeholder="  도로명주소"
+                           readonly="readonly">
+                    <br/><span id="guide" style="color:#999;font-size:10px;"></span>
+                    <br/><input class="addrtext2" type="text" id="addr1" placeholder="  나머지 주소" size="70"/>
+
+                </td>
+            </tr>
+
+        </table>
+        <table>
+            <tr height="40">
+                <td>
+                    <!-- href 로 경로를 지정해줄때는 controller로 매핑시켜놓은것으로 적어준다-->
+                    <button style="width: 300px;" id="submitBtn" type="button" class="btn btn-success">가입완료</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</html>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script language="javascript">
+    // 정규식
+    let emailEegex = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+    var koreaEegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
+    let saveAddr = '';
+    let emailChk = false;
+    let nameChk = false;
+
+    let koreaAlertCnt = 0;
+
+    $(document).ready(function(){
+        init();
+    });
+
+    function init() {
+        $("#name").val('');
+        $("#pw").val();
+        $("#pwCheck").val('')
+        $("#phone").val('');
+        $("#bnNumber").val('');
+        $("#email").val('');
+        $("#zipNo").val('');
+        $("#addr").val('');
+        $("#addr1").val('');
+        $("#chkName").val('');
+        $("#result").val('');
+
+        nameChk = false;
+        emailChk = false;
+        saveAddr = '';
+    }
+
+    function receiveAddressValues(roadAddr, zipNo) {
+        // Set the received address values in the parent window
+        document.getElementById("zipNo").value = zipNo;
+        document.getElementById("addr").value = roadAddr;
+
+    }
+
+    function searchAddr() {
+        var childWindow = window.open("addrSearch", "Child Window", " left=100,top=100, width=515,height=777");
+        return false;
+    }
+
+    function emailCheckReset() {
+        let chkMail = $("#email");
+
+        if (koreaEegex.test(chkMail.val()) && koreaAlertCnt == 0) {
+            alert('이메일 한글 x');
+            koreaAlertCnt++;
+        }
+        $(chkMail).val(chkMail.val().replace(/[^a-z.0-9@,/]/gi, '')); // 한글입력방지
+
+        if (emailEegex.test(chkMail.val())) { // 이메일 형식 체크
+            emailChk = false;
+            $('#result').text('');
+
+            emailCheck(); // 이메일 중복체크
+        } else {
+            emailChk = false;
+            $('#result').text('이메일 형식에 맞추어 작성바랍니다.');
+        }
+    }
+
+    function bnNumCheck() {
+        let bnNumber = $("#bnNumber").val();
+        let chkBnNum = bnNumber.replace(/[^0-9]/gi, '');
+
+        if (chkBnNum.length > 10) {
+            chkBnNum = chkBnNum.substring(0, 10);
+        }
+
+        $("#bnNumber").val(chkBnNum); // 사업자번호 체크
+
+    }
+
+    function bnPhoneCheck() {
+        let phone = $("#phone").val();
+        let chkPhone = phone.replace(/[^0-9]/gi, '');
+
+        if (chkPhone.length > 11) {
+            chkPhone = chkPhone.substring(0, 11);
+        }
+
+        $("#phone").val(chkPhone); // 대표번호 체크
+
+    }
+
+    function emailCheck() {
+        // 아이디를 서버로 전송 > DB 유효성 검사 > 결과 반환받기
+        if (!emailEegex.test($('#email').val())) {
+            emailChk = false;
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: '/idCheck',
+                /*보낼 데이터 : {파라미터이름 : 실제 데이터값(=위의 이메일) } */
+                data: {email: $('#email').val()},
+                dataType: 'json',/*받는타입*/
+                success: function (result) {
+                    if (result == '0') {
+                        emailChk = true;
+                        $('#result').text('사용 가능한 아이디입니다.');
+                    } else {
+                        emailChk = false;
+                        $('#result').text('이미 사용중인 아이디입니다.');
+                    }
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        }
+    }
+
+    function nameCheck() {
+        // 아이디를 서버로 전송 > DB 유효성 검사 > 결과 반환받기
+        if ($("#name").val() === '') {
+            nameChk = false;
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: '/nameCheck',
+                /*보낼 데이터 : {파라미터이름 : 실제 데이터값(=위의 이메일) } */
+                data: {name: $('#name').val()},
+                dataType: 'json',/*받는타입*/
+                success: function (result) {
+                    if (result == '0') {
+                        nameChk = true;
+                        $('#chkName').text('사용 가능한 기업명입니다.');
+                    } else {
+                        nameChk = false;
+                        $('#chkName').text('사용중인 기업명입니다.');
+                    }
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        }
+    }
+
+    // 유효성 검사
+    function vaildationChk() {
+        // 이메일
+        if (!emailChk) {
+            alert('이메일을 확인해주세요.');
+            return false;
+        }
+
+        // 비밀번호
+        if ($("#pw").val() !== $("#pwCheck").val()) {
+            alert('비밀번호가 동일하지 않습니다.');
+            return false;
+        }
+
+        // 기업명
+        if ($("#name").val() === '') {
+            alert('기업명을 입력해주세요.');
+            return false;
+        } else if (!nameChk) {
+            alert('기업명을 확인해주세요.');
+            return false;
+        }
+
+        // 사업자번호
+        if ($("#bnNumber").val() === '' || $("#bnNumber").val().length != 10) {
+            alert('사업자번호를 확인해주세요.');
+            return false;
+        }
+
+        // 대표번호
+        if ($("#phone").val() === '' || $("#phone").val().length != 11) {
+            alert('대표번호를 확인해주세요.');
+            return false;
+        }
+
+        // 주소
+        if ($("#zipNo").val() === '' || $("#addr").val() === '') {
+            alert('회사 주소를 입력해주세요.');
+            return false;
+        } else {
+            saveAddr = $("#zipNo").val() + '|' + $("#addr").val() + '|' + $("#addr1").val();
+        }
+
+        return true;
+    }
+
+    // 저장
+    $('#submitBtn').click(function () {
+        let validRes = vaildationChk();
+
+        if (validRes) {
+            $("#sName").val($("#name").val());
+            $("#sPassword").val($("#pw").val());
+            $("#sAddr").val(saveAddr);
+            $("#sPhone").val($("#phone").val());
+            $("#sBnNumber").val($("#bnNumber").val());
+            $("#sEmail").val($("#email").val());
+
+            console.log($("#registerSubmit").serialize());
+
+            $.ajax({
+                type: 'POST',
+                url: '/epInsert',
+                /*보낼 데이터 : {파라미터이름 : 실제 데이터값(=위의 이메일) } */
+                data: $("#registerSubmit").serialize(),
+                dataType: 'text',/*받는타입*/
+                success: function (result) {
+                    if (result === 'complete') {
+                        alert("회원가입이 완료되었습니다.\n로그인 후 이용해주세요.");
+                        location.href="/";
+                    } else {
+                        alert("회원가입을 실패했습니다.\n입력하신 정보를 확인해주세요.");
+                    }
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        }
+    });
+
+</script>

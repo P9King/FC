@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<div layout:fragment="content">
+    <div class="container">
+
+        <div class="recruitPoster mb-5 mx-auto">
+            <div class="mt-3">
+                <a class="link-secondary" href="/epRecruit/epRecruitList">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="currentColor"
+                         class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!--                제목-->
+            <div class="h1 fw-bold mt-3">
+                <strong th:text="'제목 : ' + ${epRecruit.getTitle()}"></strong>
+            </div>
+
+            <div class="d-flex fw-bold my-4">
+                <!--                글쓴이-->
+                <p th:text="'글쓴이 : ' + ${writerInfo.name}"></p>
+                <!--                게시일-->
+                <div class="vr mx-3" style="width: 2px"></div>
+                <p th:text="'작성일 : ' + ${epRecruit.getCreateDate().substring(0, 16)}"></p>
+                <!--                글번호-->
+                <div class="vr mx-3" style="width: 2px"></div>
+                <p th:text="'글번호 : ' + ${epRecruit.getEpBoard()}"></p>
+            </div>
+            <hr class="border border-2 opacity-75">
+            <div class="container text-center my-4">
+                <div class="row h5 fw-bold">
+                    <div class="col-md">
+                        <span class="text-secondary me-2">예상 시작일</span>
+                        <span>[[${ epRecruit.getWorkDayStart() }]]</span>
+                    </div>
+                    <div class="col-md">
+                        <span class="text-secondary me-2">예상 마무리일</span>
+                        <span>[[${ epRecruit.getWorkDayEnd() }]]</span>
+                    </div>
+                </div>
+                <div class="row h5 fw-bold">
+                    <div class="col-md ">
+                        <span class="text-secondary me-2">사용기술</span>
+                        <span class="gap-3" th:each="stack : ${epRecruitStack}" style="width: auto">
+                                <span class="badge rounded-pill text-bg-success" th:text="${stack.getStack()}"></span>
+                        </span>
+                    </div>
+                    <div class="col-md"></div>
+                </div>
+            </div>
+            <hr class="border border-2 opacity-75">
+            <div class="h1 fw-bold mt-4">프로젝트 소개</div>
+            <div class="detail fw-bold my-4" th:utext="${epRecruit.getDetail()}"></div>
+            <div th:if="${session.epLogin}">
+                <a class="btn btn-dark" th:if="${session.epLogin.epId == epRecruit.epId}" th:href="@{/epRecruit/updateForm( epBoard=${epRecruit.getEpBoard()} )}">수정</a>
+                <a class="btn btn-dark" th:if="${session.epLogin.epId == epRecruit.epId}" th:href="@{/epRecruit/delete( epBoard=${epRecruit.getEpBoard()} )}">삭제</a>
+            </div>
+        </div>
+        <a class="btn btn-dark" th:href="@{/jobHunting/sendEmail(toSendAddr=${writerInfo.getEpId()})}">채용추천서 보내기</a>
+    </div>
+    <th:block layout:fragment="css">
+        <style th:inline="css">
+            .recruitPoster {
+                max-width: 960px;
+            }
+
+            /*summernote의 기준 크기를 변경시키기 위한 !important*/
+            .detail img, iframe {
+                width: 100% !important;
+            }
+        </style>
+    </th:block>
+</div>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+
+<head>
+    <link th:href="@{/css/noticeList.css}" rel="stylesheet">
+</head>
+
+<div layout:fragment="content" class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 200px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">분류</span>
+            </th>
+            <th style="width: 570px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">제목</span>
+            </th>
+            <th>
+            </th>
+            <!--            <th id="viewCount" style="width: 120px;"><span-->
+            <!--                    class="Typography_typography__53V55 Typography_typography&#45;&#45;B2__60_O6 Typography_typography&#45;&#45;bold__BbU7t Table_gray900__Th1Yw">조회수</span>-->
+            <!--            </th>-->
+            <th style="width: 140px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">작성일</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody th:each="noticeList : ${noticeList}">
+        <tr>
+            <td colspan="1" rowspan="1" class="sortation" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">[[${noticeList.getSortation()}]]</span>
+            </td>
+            <td colspan="1" rowspan="1" class="" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">
+                <a th:href="@{/noticeOneList(noticeBoard=${noticeList.getNoticeBoard()})}">[[${noticeList.getTitle()}]]</a></span>
+            </td>
+            <td>
+            </td>
+            <td colspan="1" rowspan="1" class="date" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B3__drium Typography_typography--regular__qCojp">[[${noticeList.getCreateDate()}]]</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--    타임리프 세션에서 원하는 조건값을 가져올때의 문법!-->
+    <div th:if="${session.memberLogin}">
+        <button th:if="${session.memberLogin.role}=='admin'" type="button" class="btn btn-success"
+                onclick="location.href='noticeInsert'">공지사항 등록
+        </button>
+    </div>
+
+    <div class="d-flex justify-content-center my-5" th:if="${!noticeList.isEmpty()}">
+        <!-- 전역 변수 선언 -->
+        <nav th:with="pageNumber = ${noticeList.pageable.pageNumber}, pageSize = ${noticeList.pageable.pageSize},totalPages = ${noticeList.totalPages},startPage = ${T(java.lang.Math).floor(pageNumber / 10) * 10 + 1},tempEndPage = ${startPage + 9 < noticeList.totalPages ? startPage + 9 : noticeList.totalPages },endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+             aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- 처음으로 이동 -->
+                <li th:classappend="${noticeList.first} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/noticeAllList(page=0)}">
+                        <span>&laquo;</span>
+                        <!--                            <span class="sr-only">맨앞</span>-->
+                    </a>
+                </li>
+
+                <!-- 이전으로 이동 -->
+                <li th:classappend="${noticeList.first} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:href="${noticeList.first} ? '#' : @{/noticeAllList(page=${pageNumber - 1})}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                        <!--                            <span class="sr-only">이전</span>-->
+                    </a>
+                </li>
+
+                <!-- 특정 페이지로 이동 -->
+                <li th:each="page: ${#numbers.sequence(startPage, tempEndPage)}"
+                    th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                    <a th:text="${page}" class="page-link"
+                       th:href="@{/noticeAllList(page=${page - 1})}"></a>
+                </li>
+
+                <!-- 다음으로 이동 -->
+                <li th:classappend="${noticeList.last} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:href="${noticeList.last} ? '#' : @{/noticeAllList(page=${pageNumber + 1})}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&gt;</span>
+                        <!--                            <span class="sr-only">다음</span>-->
+                    </a>
+                </li>
+
+                <!-- 마지막으로 이동 -->
+                <li th:classappend=" ${noticeList.last} ? 'disabled'"
+                    class="page-item">
+                    <a class="page-link" th:href="@{/noticeAllList(page=${totalPages - 1})}">
+                        <span>&raquo;</span>
+                        <!--                            <span class="sr-only">맨뒤</span>-->
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+</div>
+
+
+</html>

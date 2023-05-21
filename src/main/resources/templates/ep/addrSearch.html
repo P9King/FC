@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!--<script type="text/JavaScript" src="/js/jquery-1.8.3.min.js" ></script>-->
+	<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+	<script>
+
+		function addrSearchEnter() {
+			if (event.keyCode == 13) {
+				addrSearch(1);
+			}
+		}
+
+		function closeBtn() {
+			window.close();
+
+		}
+
+		function deliveryAddress(addrNo) {
+
+			console.log(addrNo);
+			let Addr = $("#addr" + addrNo).text();
+			let zipNo = $("#zipNo" + addrNo).text();
+
+			let sendAddress = [Addr, zipNo];
+			opener.receiveAddressValues(Addr, zipNo);
+			window.close();
+
+
+		}
+
+		function addrSearch(currentPage) {
+			let keyword = $("#searchAddr").val();
+
+			if (keyword.length == 0) {
+				alert("검색할 주소를 입력해주세요.");
+				return false;
+			}
+
+			let confmKey = "devU01TX0FVVEgyMDIzMDUwMjEyMjkwMDExMzczNjE=";
+			let countPerPage = 10;
+			let resultType = "json";
+
+			$.ajax({
+				url :"https://business.juso.go.kr/addrlink/addrLinkApiJsonp.do"  //인터넷망
+				,type:"post"
+				,data:{keyword : keyword, confmKey : confmKey, currentPage : currentPage, countPerPage : countPerPage, resultType : resultType}
+				,dataType:"jsonp"
+				,crossDomain:true
+				,success:function(data){
+					let addr = data.results.juso;
+					let totalCount = data.results.common.totalCount;
+					let output = "";
+
+					if (totalCount > 9000) {
+						alert("검색결과가 너무 많습니다. 주소를 자세히 작성바랍니다.");
+						return false;
+					} else if (data.results.common.errorCode != 0) {
+						alert(data.results.common.errorMessage);
+						return false;
+					}
+
+					$("#resultContent").empty();
+
+					if (addr.length != 0) {
+
+						output += '<div class="result" id="resultList"><table class="table table-striped"><thead>';
+						output += '<tr><th class="addrTitle">우편번호</th><th class="addrTitle">도로명주소</th></tr></thead><tbody>';
+
+
+						for (let i = 0; i < addr.length; i++) {
+							output += '<td id="zipNo' + i + '">' + addr[i].zipNo + '</td>';
+							output += '<td class="addrList"><a href="#" class="addrLink" onclick="deliveryAddress(' + i + ');"><span style="display: block;"><b id="addr' + i + '">' + addr[i].roadAddr + '</b></span>';
+							output += '<span>[지번]</span>&nbsp;<span id="jibunAddrDiv1">' + addr[i].jibunAddr + '</span></a></td></tr>';
+						}
+
+						let lastPage = 0; // 총 페이지 수
+
+
+						if (totalCount < 10) {
+
+							output += '</tbody></table></div>';
+							output += '<ul class="pagination pagination-sm">';
+							output += '<li><a onclick="addrSearch(1);">1</a></li>';
+							output += '</ul>';
+
+						} else {
+
+							if (totalCount % countPerPage == 0) {
+								lastPage = totalCount / countPerPage;
+							} else {
+								lastPage = Math.ceil(totalCount / countPerPage);
+							}
+
+							output += '</tbody></table></div>';
+							output += '<div class="pagingLine"><ul class="pagination pagination-sm">';
+
+							if (currentPage != 1) {
+								output += '<li><a class="pagingNum" onclick="addrSearch(1);">&#60;&#60;</a></li>';
+								output += '<li><a class="pagingNum" onclick="addrSearch(' + (currentPage - 3) + ');">&#60;</a></li>';
+							}
+
+							if (currentPage > 3 && currentPage < lastPage - 2) {
+								output += '<li><a id="thisPage' + (currentPage - 2) + '" class="pagingNum" onclick="addrSearch(' + (currentPage - 2) + ');">' + (currentPage - 2) + '</a></li>';
+								output += '<li><a id="thisPage' + (currentPage - 1) + '" class="pagingNum" onclick="addrSearch(' + (currentPage - 1) + ');">' + (currentPage - 1) + '</a></li>';
+								output += '<li><a id="thisPage' + currentPage + '" class="pagingNum" onclick="addrSearch(' + currentPage + ');">' + currentPage + '</a></li>';
+								output += '<li><a id="thisPage' + (currentPage + 1) + '" class="pagingNum" onclick="addrSearch(' + (currentPage + 1) + ');">' + (currentPage + 1) + '</a></li>';
+								output += '<li><a id="thisPage' + (currentPage + 2) + '" class="pagingNum" onclick="addrSearch(' + (currentPage + 2) + ');">' + (currentPage + 2) + '</a></li>';
+							} else if (currentPage >= lastPage - 2) {
+								output += '<li><a id="thisPage' + (lastPage - 2) + '" class="pagingNum" onclick="addrSearch(' + (lastPage - 2) + ');">' + (lastPage - 2) + '</a></li>';
+								output += '<li><a id="thisPage' + (lastPage - 1) + '" class="pagingNum" onclick="addrSearch(' + (lastPage - 1) + ');">' + (lastPage - 1) + '</a></li>';
+								output += '<li><a id="thisPage' + currentPage + '" class="pagingNum" onclick="addrSearch(' + lastPage + ');">' + lastPage + '</a></li>';
+							} else {
+								output += '<li><a id="thisPage1" class="pagingNum" onclick="addrSearch(1);">1</a></li>';
+								output += '<li><a id="thisPage2" class="pagingNum" onclick="addrSearch(2);">2</a></li>';
+								output += '<li><a id="thisPage3" class="pagingNum" onclick="addrSearch(3);">3</a></li>';
+								output += '<li><a id="thisPage4" class="pagingNum" onclick="addrSearch(4);">4</a></li>';
+								output += '<li><a id="thisPage5" class="pagingNum" onclick="addrSearch(5);">5</a></li>';
+							}
+
+							if (currentPage == lastPage - 1) {
+								output += '<li><a class="pagingNum" onclick="addrSearch(' + lastPage + ');">&#62;&#62;</a></li>';
+							} else if (currentPage != lastPage) {
+								output += '<li><a class="pagingNum" onclick="addrSearch(' + (currentPage + 3) + ');">&#62;</a></li>';
+								output += '<li><a class="pagingNum" onclick="addrSearch(' + lastPage + ');">&#62;&#62;</a></li>';
+							}
+
+							output += '</ul></div>';
+
+						}
+
+						$("#resultContent").append(output);
+						$("#thisPage" + currentPage).attr("class", "nowPagingNum");
+
+					} else {
+						output += '<div class="noResultMsg"><p><b>검색결과가 없습니다.</b></p><p>검색어에 잘못된 철자가 없는지, 정확한 주소인지 다시 한번 확인해 주세요.</p></div>';
+						$("#resultContent").append(output);
+					}
+
+
+				}
+				,error: function(xhr,status, error){
+					alert("에러가 발생했습니다. 다시 시도 후 문의바랍니다.");
+				}
+			});
+
+		}
+
+	</script>
+
+	<style>
+
+		.content {
+			position: absolute;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			min-width: 500px;
+			min-height: 400px;
+			width: 100%;
+			border: 0 none;
+			font-family: 'Malgun Gothic','맑은 고딕',sans-serif;
+		}
+
+		.titleBar {
+			position: relative;
+			text-align: center;
+			background-color: #fff;
+			background-repeat: no-repeat;
+			background-position: 100% 100%;
+		}
+
+		.searchBar {
+			display: block;
+			position: relative;
+			background: #eee;
+			border-bottom: 1px solid #e9e9e9;
+			margin: 0 auto;
+			padding: 15px 0;
+		}
+
+		.inputBar {
+			display: block;
+			width: 420px;
+			position: relative;
+			box-sizing: border-box;
+			border: 2px solid #186bb9;
+			margin: 0 auto;
+			padding: 0 39px 0 0;
+			background-color: #fff;
+		}
+
+		.inputTextBar {
+			width: 100%;
+			line-height: 40px;
+			font-size: 15px;
+			font-weight: normal;
+			border: 0 none;
+		}
+
+		.searchBtn {
+			cursor: pointer;
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 39px;
+			background: url(/img/addrSearchIcon.png) 50% 50% no-repeat;
+			height: 45px;
+			border: 0 none;
+		}
+
+		.closeBtn {
+			position: absolute;
+			right: 10px;
+			top: 35px;
+			margin-top: -12px;
+			width: 24px;
+			height: 24px;
+			background: url(/img/closeButton.png) 50% 50% no-repeat;
+			text-indent: -9999px;
+		}
+
+		.dataBox {
+			height: auto;
+			padding: 10px 0;
+		}
+
+		.addrTitle {
+			text-align: center;.
+		}
+
+		::-webkit-scrollbar {
+			display:none;
+		}
+
+		.addrSearchTip {
+			font-size: 15px;
+			margin-bottom: 5px;
+		}
+
+		.addrSearchTipEx {
+			font-size: 15px;
+			margin-bottom: 5px;
+			color: #008bd3;
+		}
+
+		.addrLink {
+			color: #333;
+		}
+
+		.addrList a:hover {
+			color: #333;
+		}
+
+		.pagingNum {
+			color: #333 !important;
+			border: 0 !important;
+			cursor: pointer;
+		}
+
+		.nowPagingNum {
+			color: #333 !important;
+			border: 0 !important;
+			cursor: default !important;
+			background-color: #ebebea !important;
+			z-index: 3 !important;
+		}
+
+		.noResultMsg {
+			margin-top: 10px;
+			margin-bottom: 5px;
+		}
+
+		.pagingLine {
+			border-top: 1px solid #eee;
+		}
+
+	</style>
+</head>
+<body>
+<div class="content">
+	<div class="titleBar">
+		<div id="searchContentBox" style="min-height: 478px;">
+			<div class="searchBar">
+        <span class="inputBar">
+            <input type="text" class="inputTextBar" id="searchAddr" onkeyup="addrSearchEnter();" autocomplete="off" placeholder="예) 시흥대로163길 33, 구로동 1120-1, 구로 주호타워">
+            <input type="button" class="searchBtn" onclick="addrSearch('1');">
+        </span>
+			</div>
+			<div id="resultContent">
+				<div style="padding: 20px 150px; text-align: left;">
+					<h2>Tip.</h2>
+					<p class="addrSearchTip">아래 예시와 같은 조합으로 검색하시면</p>
+					<p class="addrSearchTip">더욱 정확한 결과가 검색됩니다.</p>
+					<br />
+					<p class="addrSearchTip">도로명 + 건물번호</p>
+					<p class="addrSearchTipEx">예) 시흥대로163길 33</p>
+					<br />
+					<p class="addrSearchTip">지역명(동/리) + 번지</p>
+					<p class="addrSearchTipEx">예) 구로동 1120-1</p>
+					<br />
+					<p class="addrSearchTip">지역명(동/리) + 건물명(아파트명)</p>
+					<p class="addrSearchTipEx">예) 구로 주호타워</p>
+				</div>
+			</div>
+			<a class="closeBtn" onclick="closeBtn();"></a>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

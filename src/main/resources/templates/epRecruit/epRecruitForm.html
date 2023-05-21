@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<div layout:fragment="content">
+    <!-- <form action="/epRecruit/epRecruitAction" method="post">-->
+    <div class="container">
+        <form id="form" method="post" action="/epRecruit/epRecruitAction" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="inpTitle">채용제목</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inpTitle" type="text" name="title" placeholder="제목을 입력하십시오." maxlength="50" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-form-label col-sm-2 pt-0"><label>기술스택</label></div>
+
+                <div class="col-sm-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="java" name="stack[]" value="java">
+                        <label class="form-check-label" for="java">java</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="javascript" name="stack[]"
+                               value="javascript">
+                        <label class="form-check-label" for="javascript">javascript</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="mysql" name="stack[]" value="mysql">
+                        <label class="form-check-label" for="mysql">mysql</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="oracle" name="stack[]" value="oracle">
+                        <label class="form-check-label" for="oracle">oracle</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="mariaDB" name="stack[]" value="mariaDB">
+                        <label class="form-check-label" for="mariaDB">mariaDB</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="spring" name="stack[]" value="spring">
+                        <label class="form-check-label" for="spring">spring</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="springBoot" name="stack[]"
+                               value="springBoot">
+                        <label class="form-check-label" for="springBoot">springBoot</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="myBatis" name="stack[]" value="myBatis">
+                        <label class="form-check-label" for="myBatis">myBatis</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="jpa" name="stack[]" value="jpa">
+                        <label class="form-check-label" for="jpa">jpa</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="thymeleaf" name="stack[]" value="thymeleaf">
+                        <label class="form-check-label" for="thymeleaf">thymeleaf</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="bootstrap" name="stack[]" value="bootstrap">
+                        <label class="form-check-label" for="bootstrap">bootstrap</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-form-label col-sm-2 pt-0"><label>모집상태</label></div>
+
+                <div class="col-sm-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="public" name="recruit" value="공개">
+                        <label class="form-check-label" for="public">공개</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="private" name="recruit" value="비공개" checked>
+                        <label class="form-check-label" for="private">비공개</label>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-form-label col-sm-2 pt-0"><label>성별</label></div>
+                <div class="col-sm-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="any" name="gender" value="무관" checked>
+                        <label class="form-check-label" for="any">무관</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="male" name="gender" value="남성">
+                        <label class="form-check-label" for="male">남성</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="female" name="gender" value="여성">
+                        <label class="form-check-label" for="female">여성</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-form-label col-sm-2 pt-0" for="intPay">계약금</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input class="form-control" id="intPay" type="number" name="payment" min="0" value="0">
+                        <input class="form-control" id="stringPay" type="text" disabled style="color: gray">
+                        <span class="input-group-text">원</span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" id="payCheckBox" type="checkbox" name="payment" value="추후협상"
+                               onclick="payChecked()">
+                        <label class="form-check-label" for="payCheckBox">추후 협상시 체크</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-form-label col-sm-2 pt-0"><label>게시글 종료 기간</label></div>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input class=" form-control" id="showingDate" type="date" name="showingDate">
+                        <!--                        <span class="input-group-text">~</span>-->
+                        <select class="form-select" name="showingHour" id="showingHour"></select>
+                        <select class="form-select" name="showingMin" id="showingMin"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-form-label col-sm-2 pt-0"><label>계약기간</label></div>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input class=" form-control" id="startDate" type="date" name="workDayStart">
+                        <span class="input-group-text">~</span>
+                        <input class=" form-control" id="endDate" type="date" name="workDayEnd">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="inpAddr">주소</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inpAddr" type="text" name="addr" placeholder="주소를 입력하십시오." maxlength="50" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="detail">상세요강</label>
+                <div class="col-sm-10">
+                    <textarea id="detail" type="text" th:class="form-control" name="detail"></textarea>
+                </div>
+            </div>
+
+            <!--            <div class="row mb-3">-->
+            <!--                <label class="col-sm-2 col-form-label" for="file">썸네일 등록</label>-->
+            <!--                <div class="col-sm-10">-->
+            <input class="form-control" type="file" id="file" name="file"
+                   accept=".jpg, .jpeg, .png" hidden="hidden"/>
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <div class="mb-3 text-start">
+                <button class="btn btn-primary" type="button">이전페이지</button>
+                <button class="btn btn-primary float-end" type="submit" onclick="">제출</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Content Page의 CSS fragment 삽입 -->
+    <th:block layout:fragment="css">
+        <link th:rel="stylesheet" th:href="@{/css/summernote/summernote-lite.min.css}">
+    </th:block>
+
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/summernote/summernote-lite.min.js}"></script>
+        <script th:src="@{/js/summernote/lang/summernote-ko-KR.min.js}"></script>
+        <script th:inline="javascript">
+
+            const date = new Date();
+
+            document.querySelector("#startDate").value = date.toISOString().substring(0, 10);
+            document.querySelector("#endDate").value = date.toISOString().substring(0, 10);
+            date.setMonth(date.getMonth() + 1);
+            document.querySelector("#showingDate").value = date.toISOString().substring(0, 10);
+
+            let hourSel = document.querySelector("#showingHour");
+            for (let i = 0; i < 24; i++) {
+                let opt = document.createElement("option");
+                opt.value = i;
+                opt.innerText = i + "시";
+                if (i === 12) {
+                    opt.selected = true;
+                }
+                hourSel.options.add(opt)
+            }
+
+            let minSel = document.querySelector("#showingMin");
+            for (let i = 0; i < 60; i++) {
+                let opt = document.createElement("option");
+                opt.value = i;
+                opt.innerText = i + "분";
+                if (i === 30) {
+                    opt.selected = true;
+                }
+                minSel.options.add(opt)
+            }
+
+            $('#detail').summernote({
+                // 에디터 높이
+                height: 500,
+                // 에디터 한글 설정
+                lang: "ko-KR",
+                // 에디터에 커서 이동 (input창의 autofocus라고 생각)
+                focus: false,
+                placeholder: '최대 2048자까지 쓸 수 있습니다',
+                toolbar: [
+                    // 글자 크기 설정
+                    ['style', ['style']],
+                    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    // 글자색
+                    ['color', ['forecolor', 'color']],
+                    // 표만들기
+                    ['table', ['table']],
+                    // 글머리 기호, 번호매기기, 문단정렬
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    // 줄간격
+                    ['height', ['height']],
+                    // 링크, 사진, 비디오
+                    ['insert', ['link', 'picture', 'video']],
+                    // 코드보기, 확대해서보기, 도움말
+                    ['view', ['help']]
+                ],
+                callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                    onImageUpload: function (files) {
+                        uploadSummernoteImageFile(files[0], this);
+                    },
+                    onPaste: function (e) {
+                        var clipboardData = e.originalEvent.clipboardData;
+                        if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                            var item = clipboardData.items[0];
+                            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                }
+            });
+
+            /**
+             * 이미지 파일 업로드
+             */
+            function uploadSummernoteImageFile(file, editor) {
+                data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data: data,
+                    type: "POST",
+                    url: "/epRecruit/uploadSummernoteImageFile",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        //항상 업로드된 파일의 url이 있어야 한다.
+                        console.log(data.url)
+                        $(editor).summernote('insertImage', data.url);
+                    }
+                });
+            }
+
+            let strPay = document.getElementById("stringPay");
+            let intPay = document.getElementById("intPay");
+            intPay.addEventListener("input", function (e) {
+                let intPayVal = parseInt(document.getElementById("intPay").value);
+                if (0 <= intPayVal) {
+                    strPay.value = intPayVal.toLocaleString('ko-KR');
+                } else {
+                    strPay.value = 0;
+                }
+
+            });
+
+            function payChecked() {
+                const payChecked = document.querySelector("#payCheckBox").checked;
+
+                if (payChecked === true) {
+                    intPay.value = 0;
+                    strPay.value = 0;
+                    intPay.disabled = true;
+                } else {
+                    intPay.disabled = false;
+                }
+            }
+
+        </script>
+    </th:block>
+
+</div>
+
+
+</html>

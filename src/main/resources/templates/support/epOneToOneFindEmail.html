@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+
+<head>
+    <link th:href="@{/css/noticeList.css}" rel="stylesheet">
+</head>
+<div layout:fragment="content" class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 200px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">분류</span>
+            </th>
+            <th style="width: 570px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">제목</span>
+            </th>
+
+            <!--            <th id="viewCount" style="width: 120px;"><span-->
+            <!--                    class="Typography_typography__53V55 Typography_typography&#45;&#45;B2__60_O6 Typography_typography&#45;&#45;bold__BbU7t Table_gray900__Th1Yw">조회수</span>-->
+            <!--            </th>-->
+            <th style="width: 140px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">진행상황</span>
+            </th>
+            <th style="width: 140px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--bold__BbU7t Table_gray900__Th1Yw">작성일</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody th:each="oneToOneList : ${oneToOneList}">
+        <tr>
+            <td colspan="1" rowspan="1" class="sortation" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">[[${oneToOneList.getCategories()}]]</span>
+            </td>
+            <td colspan="1" rowspan="1" class="" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B2__60_O6 Typography_typography--regular__qCojp">
+                <a th:href="@{/oneToOneList(id=${oneToOneList.getId()})}">[[${oneToOneList.getTitle()}]]</a></span>
+
+
+            </td>
+            <td colspan="1" rowspan="1" class="date" style="padding-bottom: 0px; padding-top: 0px;"><span
+                class="Typography_typography__53V55 Typography_typography--B3__drium Typography_typography--regular__qCojp"th:if="${oneToOneList.getIng() == 0}">대기중</span>
+                <span
+                        class="Typography_typography__53V55 Typography_typography--B3__drium Typography_typography--regular__qCojp"th:if="${oneToOneList.getIng() == 1}">답변완료</span>
+            </td>
+            <td colspan="1" rowspan="1" class="date" style="padding-bottom: 0px; padding-top: 0px;"><span
+                    class="Typography_typography__53V55 Typography_typography--B3__drium Typography_typography--regular__qCojp">[[${oneToOneList.getCreateDate()}]]</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--    타임리프 세션에서 원하는 조건값을 가져올때의 문법!-->
+    <div th:if="${session.memberLogin}">
+        <button th:if="${session.memberLogin.role}=='admin'" type="button" class="btn btn-success"
+                onclick="location.href='noticeInsert'">공지사항 등록
+        </button>
+    </div>
+</div>
+
+
+</html>

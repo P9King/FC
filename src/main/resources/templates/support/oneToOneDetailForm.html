@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .stack {
+            display: flex;
+        }
+        .submitDiv {
+            display: flex;
+            justify-content: end;
+        }
+        .inputInfo {
+            width: 750px;
+        }
+        .myStacks {
+            width: 634px;
+        }
+        .textAreaInfo {
+            width: 750px;
+            height: 500px;
+        }
+        .container {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<div layout:fragment="content" class="container">
+    <table>
+        <form action="/oneToOneModify"  method="post" id="modifySuccess">
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" name="id" class="inputInfo" th:value="${oneToOneList.getId()}"
+                           hidden="hidden">
+                    <input type="text" name="title" class="inputInfo" th:value="${oneToOneList.getTitle()}">
+                </td>
+            </tr>
+            <tr>
+                <div>
+                    <th>카테고리:</th>
+                    <td>
+
+                        <span><a>[[${oneToOneList.getCategories()}]]</a></span>
+
+<!--                        <label for="private" th:value="${oneToOneList.}">이벤트</label>-->
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <th>상세내용</th>
+                <td>
+                    <textarea class="textAreaInfo" name="detail" th:value="${oneToOneList.getDetail()}"
+                              th:text="${oneToOneList.getDetail()}"></textarea>
+                </td>
+            </tr>
+        </form>
+        <form action="/epOneToOneDelete"  method="post" id="delete">
+            <input type="hidden" name="id" class="inputInfo" th:value="${oneToOneList.getId()}">
+        </form>
+    </table>
+    <table>
+        <tr>
+            <td colspan="2">
+                <br>
+                <div class="submitDiv">
+                        <span>
+                            <button style="margin-left: 70px" type="submit" class="btn btn-primary"
+                                    onclick="location.href='/epOneToOneFindEmail'">목록으로</button>
+
+                            <button style="margin-left: 10px" type="submit" class="btn btn-primary" form="modifySuccess">수정</button>
+
+                            <button style="margin-left: 10px" type="submit" class="btn btn-primary" form="delete" onclick="alert('게시글이 삭제되었습니다.')">삭제</button>
+
+                        </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</html>

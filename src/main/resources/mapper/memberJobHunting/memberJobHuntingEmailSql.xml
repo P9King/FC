@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.fc.memberJobHunting.memberJobHuntingDao.MemberJobHuntingEmailDao">
+
+    <!--기업에 지원서 보내기-->
+    <insert id="sendEmailToEp" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingEmailVo">
+        insert into job_hunting_email
+            (title, my_stack, career, my_framework, payment, contract_period, to_email, my_email, my_phone, detail)
+                values
+                (#{title}, #{myStack}, #{career}, #{myFramework}, #{payment}, #{contractPeriod}, #{toEmail}, #{myEmail}, #{myPhone}, #{detail})
+    </insert>
+
+
+</mapper>

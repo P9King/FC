@@ -1,0 +1,138 @@
+@charset "utf-8";
+
+content {
+    padding: 0;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.my_notification .tabWrap {padding:56px 0 22px;}
+.my_notification .wrap_cards {position:relative;height:234px}
+.my_notification .sliders {overflow:hidden;position:relative;width:1264px;height:234px}
+.my_notification .sliders:before {position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;background:#fff;content:""}
+.my_notification.complete .sliders:before {display:none}
+.my_notification .sliders .bx-viewport {overflow:visible !important}
+.my_notification .slider:after {display:table;clear:both;content:"";table-layout:fixed}
+.my_notification .slider li {float:left;position:relative;width:300px;height:190px;border-width:1px;border-style:solid;border-radius:16px;box-sizing:border-box;letter-spacing:-1px}
+.my_notification .slider.my li:nth-of-type(4n+1),
+.my_notification .slider.apply li {border-color:#5189fa;background:#5189fa}
+.my_notification .slider.my li:nth-of-type(4n+2),
+.my_notification .slider.request li {border-color:#00cba4;background:#00cba4}
+.my_notification .slider.my li:nth-of-type(4n+3),
+.my_notification .slider.jobs li {border-color:#00beea;background:#00beea}
+.my_notification .slider.my li:nth-of-type(4n+4),
+.my_notification .slider.company li {border-color:#a574ee;background:#a574ee}
+.my_notification .slider li:hover {border-color:#d7dce5 !important;background:#fff !important;box-shadow:2px 6px 16px 0 rgba(17,42,128,0.08)}
+.my_notification .slider li dl {position:absolute;top:81px;right:23px;bottom:23px;left:23px}
+.my_notification .slider.my li dl {position:static}
+.my_notification .slider li:hover dl {-webkit-transition:transform 0.2s ease-in-out;transition:transform 0.2s ease-in-out;-webkit-transform:translateY(-58px);-ms-transform:translateY(-58px);transform:translateY(-58px)}
+.my_notification .slider.my li:hover dl {-webkit-transition:none;transition:none;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}
+.my_notification .slider .link {display:block;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%}
+.my_notification .slider .link:after {display:block;position:absolute;top:0;right:0;bottom:0;left:0;background:#fff;content:"";opacity:0}
+.my_notification .slider .link[href="#"] {cursor:default}
+.my_notification .slider .inner {position:relative;z-index:1;padding:23px;height:100%;box-sizing:border-box}
+.my_notification .slider .link_card {position:absolute;top:0;right:0;bottom:0;left:0;z-index:1}
+.my_notification .slider .link_card:after {display:block;position:absolute;top:0;right:0;bottom:0;left:0;background:#fff;content:"";opacity:0}
+.my_notification .slider .title {overflow:hidden;margin-bottom:12px;width:100%;color:#fff;font-size:18px;font-weight:bold;line-height:24px;text-overflow:ellipsis;white-space:nowrap}
+.my_notification .slider .txt {overflow:hidden;width:100%;color:#f8fafc;font-size:14px;line-height:24px;text-overflow:ellipsis;white-space:nowrap}
+.my_notification .slider .txt a {color:inherit;text-decoration:underline;text-underline-offset:1px}
+.my_notification .slider .txt a:hover {color:#373f57}
+.my_notification .slider .txt span {display:inline-block;width:56px;font-size:13px;line-height:24px;vertical-align:top}
+.my_notification .slider .txt.define,
+.my_notification .slider .txt.list {font-size:0}
+.my_notification .slider .txt.list span {width:auto}
+.my_notification .slider .txt.list span+span {margin-left:10px}
+.my_notification .slider .flag {position:relative;margin-bottom:34px;padding-left:34px;color:#fff;font-size:14px;font-weight:bold;line-height:24px;opacity:1}
+.my_notification .slider .flag svg {position:absolute;top:0;left:0;width:24px;height:24px}
+.my_notification .slider .flag svg use {color:#fff}
+.my_notification .slider .btn_card {display:table;position:absolute;bottom:23px;z-index:2;width:252px;opacity:0}
+.my_notification .slider .btn_card>span {display:table-cell;min-width:122px}
+.my_notification .slider .btn_card>span+span {padding-left:8px}
+.my_notification .slider .btn_card .btnSizeM {width:100%}
+.my_notification .slider .btn_card .sri_btn_ml {width:100%}
+.my_notification .slider .btn_card .sri_btn_ml>span {width:calc(100% - 2px)}
+.my_notification .slider .title_input {display:block;position:relative;top:-18px;color:#fff;font-size:15px;font-weight:bold;line-height:21px}
+.my_notification .slider .wrap_input {position:absolute;bottom:23px;padding:4px;width:252px;border-radius:4px;box-sizing:border-box}
+
+
+
+
+/* 상단 */
+.wrap_my_home .wrap_title_box .wrap_title,
+.wrap_my_home .wrap_title_box .toolTipWrap {display:inline-block;vertical-align:top; margin-top: 30px;}
+/* WMG-30814 가입당일 이력서 및 희만근무조건 */
+/* 예전에 사용 - 아직 개발 소스에 남아있음 */
+
+
+
+/* 내 정보수정 */
+.wrap_my_home .wrap_title_box .btn_setting {display:inline-block;padding:6px 30px 6px 16px;border:1px solid;border-radius:56px;color:#fff;font-size:13px;letter-spacing:-1px;line-height:24px;}
+.wrap_my_home .wrap_title_box .btn_setting.job_state:hover {background:#deebff right 14px center url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%234876EF' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat}
+
+
+
+/* TAB */
+.tabWrap {padding:50px 0 20px; margin-right: 200px;}
+.tabWrap:after {display:table;clear:both;content:"";table-layout:fixed}
+.tabWrap li {float:left;padding-right:20px}
+.tabWrap .tab {display:block;padding:10px 20px 10px 0;color:#8491a7;font-size:20px;font-weight:bold;letter-spacing:-1px;line-height:27px}
+.tabWrap .tab .badge {display:inline-block;margin:0 0 0 8px;padding:0 12px 0 13px;min-width:36px;height:28px;border-radius:14px;box-sizing:border-box;color:#fff;font-size:18px;letter-spacing:0;vertical-align:top;background:#96a0b5}
+.tabWrap .tab:hover {color:#5c667b}
+.tabWrap .tab:hover .badge {background:#5c667b}
+.tabWrap .tab:disabled {color:#b4c0d3}
+.tabWrap .tab:disabled:hover {color:#b4c0d3}
+.tabWrap .tab.disabled {color:#b4c0d3}
+.tabWrap .tab.disabled:hover {color:#b4c0d3}
+
+
+
+/* reset & common class*/
+html {color:#000;background:#fff}
+body {width:100%;height:100%;-webkit-text-size-adjust:none}
+button {margin:0;padding:0;font-family:"Malgun Gothic",dotum,gulim,sans-serif}
+table {border-spacing:0;border-collapse:collapse;font-family:"Malgun Gothic",dotum,gulim,sans-serif;font-size:inherit;line-height:100%}
+img {border:0}
+var {font-weight:normal;font-style:normal}
+b {font-weight:bold}
+li {list-style:none}
+th {text-align:left}
+h6 {font-size:100%;font-weight:normal}
+q:after {content:""}
+ins {text-decoration:none}
+acronym {border:0;font-variant:normal}
+sup {vertical-align:text-top}
+sub {vertical-align:text-bottom}
+legend {color:#000}
+a {color:#444;text-decoration:none}
+article {display:block}
+option {font-family:inherit;font-size:inherit;font-weight:inherit;font-style:inherit}
+select {line-height:normal}
+button {border:0;background:transparent;cursor:pointer}
+.hidden,
+.blind {overflow:hidden;clip:rect(1px,1px,1px,1px);position:absolute !important;width:1px;height:1px}
+.ellipsis {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.noSelect {-webkit-user-select:none;-moz-user-select:none;user-select:none;-o-user-select:none;-khtml-user-select:none}
+.img_svg_layout,
+.img_svg_common,
+.img_svg_hidden {visibility:hidden;overflow:hidden;position:absolute;width:0;height:0}
+
+
+
+
+/* 상단 */
+.wrap_my_home .wrap_title_box .wrap_title,
+.wrap_my_home .wrap_title_box .toolTipWrap {display:inline-block;vertical-align:top}
+/* WMG-30814 가입당일 이력서 및 희만근무조건 */
+
+/* 내 구직상태는? */
+.wrap_my_home .wrap_title_box .btn_setting {display:inline-block;margin:12px 0 0 10px;padding:6px 30px 6px 16px;border:1px solid;border-radius:56px;color:#fff;font-size:13px;letter-spacing:-1px;line-height:24px;vertical-align:top}
+.wrap_my_home .wrap_title_box .btn_setting {background:right 14px center url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='white' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat}
+.wrap_my_home .wrap_title_box .btn_setting.job_state {padding-right:30px;border:1px solid #eff5ff;color:#4876ef;font-weight:bold;background:#eff5ff right 14px center url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%234876EF' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat}
+.wrap_my_home .wrap_title_box .btn_setting.job_state:hover {background:#deebff right 14px center url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%234876EF' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat}
+.wrap_my_home .wrap_title_box .btn_setting.job_search {border-color:#475067;background-color:#475067}
+.wrap_my_home .wrap_title_box .btn_setting.job_search:hover {border-color:#292e41;background-color:#292e41}
+.wrap_my_home .wrap_title_box .btn_setting.job_interest {border-color:#96a0b5;background-color:#96a0b5}
+.wrap_my_home .wrap_title_box .btn_setting.job_interest:hover {border-color:#6b768b;background-color:#6b768b}
+.wrap_my_home .wrap_title_box .btn_setting.job_none {border-color:#8491a7;color:#8491a7;background:right 14px center url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%238491A7' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat}
+.wrap_my_home .wrap_title_box .btn_setting.job_none:hover {background-color:#f4f6fa}

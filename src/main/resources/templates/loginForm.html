@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <link th:href="@{/css/loginForm.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/089f36b7b1.js"></script>
+</head>
+
+
+<div layout:fragment="content">
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <h6 class="mb-3 pb-3" >
+                            <span onclick="location.href='/login?userType2=0'">개인 회원</span>
+                            <span onclick="location.href='/login?userType2=1'">기업 회원</span>
+                        <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                        <label style="margin-top: 30px" for="reg-log"></label>
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <form method="post" action="/login">
+                                            <h4 class="mb-4 pb-3">개인 회원 로그인</h4>
+                                            <div class="form-group">
+                                                <input type="email" name="email" class="form-style"
+                                                       placeholder="Your Email" id="logemail" autocomplete="off">
+                                                <i class="input-icon fa-solid fa-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="password" class="form-style"
+                                                       placeholder="Your Password" id="logpass" autocomplete="off">
+                                                <i class="input-icon fa-solid fa-lock"></i>
+                                            </div>
+                                            <button class="button mt-4">로그인</button>
+                                            <p class="mb-0 mt-4 text-center"><a href="memberPassword" class="link">이메일/비밀번호를 잊으셨나요?</a>
+                                            </p>
+                                                <input th:if="${verifyingCode}" type="hidden" name="verifyingCode" th:value="${verifyingCode}"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-back">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <form method="post" action="/epLogin">
+                                            <h4 class="mb-4 pb-3">기업 회원 로그인</h4>
+                                            <div class="form-group">
+                                                <input type="email" name="email" class="form-style"
+                                                       placeholder="Your Email" id="logemail" autocomplete="off">
+                                                <i class="input-icon fa-solid fa-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="password" class="form-style"
+                                                       placeholder="Your Password" id="logpass" autocomplete="off">
+                                                <i class="input-icon fa-solid fa-lock"></i>
+                                            </div>
+                                            <button href="#" class="button mt-4">로그인</button>
+                                            <p class="mb-0 mt-4 text-center"><a href="epPassword" class="link">이메일/비밀번호를 잊으셨나요?</a></p>
+
+                                                <input th:if="${verifyingCode}" type="hidden" name="verifyingCode" th:value="${verifyingCode}"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(function(){
+            var result = [[${userType}]];
+
+            //기업 로그인 창
+            if(result == 1){
+                $('#reg-log').trigger('click');
+
+            }
+        })
+
+    </script>
+</th:block>
+
+</html>

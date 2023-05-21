@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+
+<div layout:fragment="content">
+    <div th:each="list : ${list}">
+            아이디 : <span th:text="${list.getMemberId()}"></span>
+            비밀번호 : <span th:text = "${list.getPassword()}" /><br>
+            이름 : <span th:text = "${list.getName()}" /><br>
+            이메일 : <span th:text = "${list.getEmail()}" /><br>
+        <h1>등록성공!</h1>
+    </div>
+</div>
+</html>

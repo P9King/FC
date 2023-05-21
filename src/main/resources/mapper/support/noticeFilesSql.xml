@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.fc.support.supportDao.NoticeFilesDao">
+
+    <insert id="insertNoticeFiles" parameterType="com.example.fc.support.supportVo.NoticeFilesVo">
+        insert into notice_files(notice_board, original_file_name, stored_file_name, save_path) values (#{noticeBoard}, #{originalFileName}, #{storedFileName}, #{savePath});
+    </insert>
+
+    <select id="noticeFilesList" resultType="com.example.fc.support.supportVo.NoticeFilesVo">
+        select *
+        from notice_files
+        where notice_board = #{noticeBoard}
+    </select>
+</mapper>

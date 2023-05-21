@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.epRecruit.epRecruitDao.EpRecruitDao">
+
+    <!-- 기업 > 모집 공고 리스트 -->
+    <select id="epList" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO">
+        select * from ep_recruit order by ep_board DESC;
+    </select>
+
+<!--    기업 모집 공고 검색 리스트-->
+    <select id="epFindByTitleList" parameterType="String" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO">
+        select distinct er.ep_board, er.ep_id, er.title, er.stack,
+            er.showing_period, er.recruit, er.gender, er.payment, er.work_day_start,
+            er.work_day_end, er.addr, er.detail, er.create_date, er.update_date,
+            er.file_attached  from ep_recruit as er inner join ep_recruit_stack as ers
+            on er.ep_board = ers.ep_board where er.title like CONCAT('%', #{title}, '%') order by er.ep_board DESC;
+    </select>
+
+    <!--    기업 모집 공고 검색 리스트-->
+    <select id="epFindByStackAndTitleList" parameterType="String" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO">
+        select distinct er.ep_board, er.ep_id, er.title, er.stack,
+            er.showing_period, er.recruit, er.gender, er.payment, er.work_day_start,
+            er.work_day_end, er.addr, er.detail, er.create_date, er.update_date,
+            er.file_attached  from ep_recruit as er inner join ep_recruit_stack as ers
+            on er.ep_board = ers.ep_board where ers.stack like #{stack}
+            and er.title like CONCAT('%', #{title}, '%') order by er.ep_board DESC;
+    </select>
+
+    <!-- 기업 > 유저가 마지막으로 등록한 모집 공고인데 유저정보를 받아와야해서 현재 반쪽짜리 기능이다  -->
+    <select id="epRecruitLastId" resultType="java.lang.Long">
+        SELECT MAX(ep_board) FROM ep_recruit;
+    </select>
+
+
+    <!-- 기업 > 모집공고 Insert -->
+    <insert id="epRecruitSave" parameterType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO">
+        INSERT INTO ep_recruit(title, ep_id, stack, showing_period, recruit, gender, payment, work_day_start, work_day_end, addr, detail, create_date, update_date, file_attached)
+        VALUES (#{title}, #{epId}, #{stack}, #{showingPeriod}, #{recruit}, #{gender}, #{payment}, #{workDayStart}, #{workDayEnd}, #{addr}, #{detail}, now(), now(), #{fileAttached} );
+    </insert>
+
+    <!--    기업 > 모집 공고 -->
+    <select id="epRecruitFindById" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO" parameterType="java.lang.Long">
+        select * from ep_recruit where ep_board = #{epBoard};
+    </select>
+
+<!--   기업 > 모집 공고 글쓴이 정보 -->
+    <select id="epNameFindByEpBoard" resultType="java.util.HashMap" parameterType="java.lang.Long">
+        SELECT distinct e.name FROM fc.ep as e inner join fc.ep_recruit as er on e.ep_id = er.ep_id where er.ep_board = #{epBoard};
+    </select>
+
+    <!-- 기업게시판 left join 기업썸네일 역순정렬 -->
+    <select id="epRecruitMainList" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitLeftJoinMainThumbnailVO">
+        select * from ep_recruit er left join ep_recruit_mainthumbnail erm on er.ep_board = erm.ep_recruit_board order by ep_board DESC;;
+    </select>
+
+<!--    epRecruit 삭제 -->
+    <delete id="epRecruitDeleteById" parameterType="java.lang.Long">
+        delete from ep_recruit where ep_board = #{epBoard};
+    </delete>
+
+<!--    epRecruit 수정 -->
+    <update id="epRecruitUpdateById" parameterType="com.example.fc.epRecruit.epRecruitVo.EpRecruitVO">
+        UPDATE ep_recruit SET ep_id = #{epId}, title = #{title}, stack = #{stack}, recruit = #{recruit},
+                              gender = #{gender}, payment = #{payment}, showing_period = #{showingPeriod},
+                              work_Day_Start = #{workDayStart}, work_Day_End = #{workDayEnd}, addr = #{addr},
+                              detail = #{detail}, update_date = now() WHERE ep_board = #{epBoard};
+    </update>
+
+    <!--해당 id값 사용자의 모든정보-->
+    <select id="findEpById" resultType="com.example.fc.ep.epVo.EpVo">
+        select * from ep where ep_id =#{epId}
+    </select>
+
+
+
+</mapper>

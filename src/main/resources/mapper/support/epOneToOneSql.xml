@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.support.supportDao.EpOneToOneDao">
+
+    <!-- 기업 1대1문의글 등록 -->
+    <insert id="epPersonalInquire" parameterType="com.example.fc.support.supportVo.EpOneToOneVo">
+        insert into ep_onetoone(title, detail,email,categories, create_date)
+        values (#{title}, #{detail},#{email},#{categories}, now());
+    </insert>
+
+    <select id="epOneToOneCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(*) FROM ep_onetoone where email = #{email};
+    </select>
+
+    <select id="epOneToOneFindEmail" resultType="com.example.fc.support.supportVo.EpOneToOneVo" parameterType="java.lang.String" >
+        SELECT * FROM ep_onetoone where email = #{email};
+    </select>
+
+    <!--  1대1 상세보기-->
+    <select id="oneToOneList" resultType="com.example.fc.support.supportVo.EpOneToOneVo">
+        select *
+        from ep_onetoone
+        where id = #{id}
+    </select>
+
+    <update id="oneToOneModify" parameterType="com.example.fc.support.supportVo.EpOneToOneVo">
+        update ep_onetoone SET title = #{title},detail = #{detail}
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="epOneToOneDelete" parameterType="com.example.fc.support.supportVo.EpOneToOneVo">
+        delete from ep_onetoone where id = #{id}
+    </delete>
+
+
+</mapper>

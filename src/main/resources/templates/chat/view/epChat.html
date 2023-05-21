@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .msgMonitor {
+            height: 800px;
+            width: 1200px;
+        }
+
+        .msgTxt {
+            width: 93%;
+        }
+
+        .sendBtn {
+            width: 5%;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container messageBox">
+    <div class="msgMonitor">
+        <ul class="messageArea">
+            <div th:if="${chatHistory}" th:each="list : ${chatHistory}">
+                <li th:text="${list.sender}+': '+${list.chatDetail}"></li>
+            </div>
+
+            <li th:if="${session.epLogin}">운영자에게 질문 하실 내용을 입력해주세요.</li>
+
+        </ul>
+    </div>
+    <div>
+        <textarea class="msgTxt"></textarea>
+        <button class="sendBtn" type="button" onclick="sendMessages()">send</button>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:inline="javascript">
+        let section = 'ep';
+        let epVo;
+        let memberVo;
+        let msgTxt;
+        let stompClient = null;
+        let messageArea;
+        let messageElement;
+        let name;
+        let email;
+        let password;
+        let role;
+
+
+        /*roomId 관련*/
+        if ([[${session.memberLogin}]]) {
+            memberVo = [[${session.memberLogin}]];
+            //운영자 관련
+            //if (memberVo.role == 'admin') {
+                let query = window.location.search;
+                let param = new URLSearchParams(query);
+                epRoom = param.get('epRoom');
+                role = 'admin';
+                name = '운영자';
+                epVo = {
+                    epId: 9999,
+                    name: '운영자',
+                    role: 'admin',
+                    email: 'admin',
+                    password: 'admin',
+                    address: 'admin'
+                };
+           // }
+
+        } else if ([[${session.epLogin}]]) {
+            epVo = [[${session.epLogin}]];
+            name = epVo.name;
+            role = epVo.role;
+            epRoom = epVo.epId;
+            console.log(epVo.role + "EPVO지롱~~");
+        } else {
+            /*  alert("로그인 후 이용가능한 서비스 입니다.");
+              location.href="/login";*/
+        }
+
+        console.log(epRoom + "epRoom");
+
+        /*채팅방 클릭시 정보 가지고 와야함*/
+
+        /*소켓관련*/
+        let sock = new SockJS("/ws");
+        stompClient = Stomp.over(sock);
+        stompClient.connect({}, onConnected, onError); //.연결(람다,실행함수,에러)
+
+        function onConnected(event) {
+
+            // Subscribe to the Public Topic
+            // 상대방에게 메세지를 주고 받기 위해선 uri 구독해야한다.
+            // (url주소, function())
+            //특정 방을 구독해야 구독한 사람들끼리 대화가능
+            stompClient.subscribe('/topic/epRoom/' + epRoom, receivedMessage);
+            stompClient.send('/app/chat/epMsg',
+                {},
+                JSON.stringify({
+                    sender: name,
+                    content: name + "입장하셨습니다",
+                    epVo: epVo,
+                    role: role,
+                    section:section,
+                    epRoom: epRoom,
+                    type: 'JOIN'
+                })
+            );
+        }
+
+        function sendMessages() {
+            msgTxt = document.querySelector('.msgTxt');
+            console.log(msgTxt.value);
+            if (msgTxt && stompClient) {
+                let chatMessage = {
+                    epVo: epVo,
+                    sender: name,
+                    role: role,
+                    section: section,
+                    content: msgTxt.value,
+                    epRoom: epRoom,
+                    type: 'CHAT'
+                };
+                stompClient.send('/app/chat/epMsg', {}, JSON.stringify(chatMessage));
+                msgTxt.value = '';
+            }
+        }
+
+        function receivedMessage(payload) {
+            //payload는 자바에서 @Payload설정한 녀석이 넘어오는듯
+            let message = JSON.parse(payload.body);
+
+            messageElement = document.createElement('li');
+            messageArea = document.querySelector('.messageArea');
+
+            let textElement = document.createElement('p');
+            let messageText = document.createTextNode(message.sender + ": " + message.content);
+            console.log(messageText)
+            textElement.appendChild(messageText);
+
+            messageElement.appendChild(textElement);
+
+            messageArea.appendChild(messageElement);
+            messageArea.scrollTop = messageArea.scrollHeight;
+
+        }
+
+        function onError(error) {
+            connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+            connectingElement.style.color = 'red';
+        }
+
+    </script>
+</th:block>
+</body>
+</html>

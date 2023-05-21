@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.ep.epDao.EpDao">
+
+    <!-- 기업 회원가입 Insert -->
+    <insert id="epJoin" parameterType="com.example.fc.ep.epVo.EpVo">
+        INSERT INTO ep (
+                        email
+                        ,name
+                        ,content
+                        ,password
+                        ,addr
+                        ,phone
+                        ,bn_number
+                        ,create_date
+                        ,role)
+        values (
+                #{email}
+                ,#{name}
+                ,#{content}
+                ,#{password}
+                ,#{addr}
+                ,#{phone}
+                ,#{bnNumber}
+                ,DATE_FORMAT(now(), '%Y-%m-%d')
+                ,#{role});
+    </insert>
+
+    <!-- 로그인 -->
+    <select id="epLogin" resultType="com.example.fc.ep.epVo.EpVo">
+        select ep_id, email_verified ,email, name, content, password, addr,phone, bn_number, role from ep where email = #{email} and password = #{password};
+    </select>
+
+    <!--정보수정-->
+    <update id="epModify" parameterType="com.example.fc.ep.epVo.EpVo">
+        UPDATE ep SET email=#{email}, password =#{password}, name = #{name},content = #{content},addr = #{addr},phone=#{phone},bn_number = #{bnNumber}
+        WHERE email = #{email}
+
+    </update>
+
+    <delete id="epDelete" parameterType="com.example.fc.ep.epVo.EpVo">
+        DELETE FROM ep WHERE email = #{email}
+
+    </delete>
+    <!--중복체크-->
+    <select id="idCheck" parameterType="com.example.fc.ep.epVo.EpVo" resultType="java.lang.Integer">
+        select count(*) From ep where email =#{email}
+    </select>
+    <select id="nameCheck" parameterType="com.example.fc.ep.epVo.EpVo" resultType="java.lang.Integer">
+        select count(*) From ep where name =#{name}
+    </select>
+<!--    비밀번호 찾기-->
+    <select id="epPasswordCheck" resultType="com.example.fc.ep.epVo.EpVo">
+        select password,email,name From ep where email = #{email} and name = #{name};
+    </select>
+<!--      이메일 찾기-->
+    <select id="epEmailCheck" resultType="com.example.fc.ep.epVo.EpVo">
+        select password, name,email From ep where name = #{name} and bn_number = #{bnNumber};
+    </select>
+
+    <!--이메일 인증-->
+    <update id="emailVerified" parameterType="com.example.fc.ep.epVo.EpVo">
+        UPDATE ep SET email_verified =1 where email=#{email} AND password =#{password}
+    </update>
+</mapper>

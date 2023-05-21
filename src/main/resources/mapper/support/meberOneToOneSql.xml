@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.support.supportDao.MemberOneToOneDao">
+
+
+    <!-- 멤버 1대1문의글 등록 -->
+    <insert id="mPersonalInquire" parameterType="com.example.fc.support.supportVo.MemberOneToOneVo">
+        insert into m_onetoone(title, detail,email,categories, create_date)
+        values (#{title}, #{detail},#{email},#{categories}, now());
+    </insert>
+
+</mapper>

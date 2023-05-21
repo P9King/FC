@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.email.dao.verification.EmailVerificationDao">
+
+    <!--ep관련 맵핑-->
+    <insert id="insertEpVerification" parameterType="com.example.fc.email.model.EmailVerification">
+        insert into email_verification (email, verifying_code) values (#{email}, #{strCode})
+    </insert>
+
+    <select id="epCheckVerification" parameterType="com.example.fc.email.model.EmailVerification" resultType="java.lang.Integer">
+        select count(*) from email_verification where email=#{email} and verifying_code=#{verifyingCode}
+    </select>
+
+    <update id="epGotVerification" parameterType="com.example.fc.email.model.EmailVerification">
+        update email_verification set verified = 1 where email =#{email} and verifying_code =#{verifyingCode}
+    </update>
+
+
+    <!--개인회원 관련 맵핑-->
+    <insert id="insertMemberVerification" parameterType="com.example.fc.email.model.EmailVerification">
+        insert into email_verification (verify_email, verifying_code) values (#{email}, #{strCode})
+    </insert>
+
+    <select id="memberCheckVerification" parameterType="com.example.fc.email.model.EmailVerification" resultType="java.lang.Integer">
+        select count(*) from email_verification where email=#{email} and verifying_code=#{verifyingCode}
+    </select>
+
+    <update id="memberGotVerification" parameterType="com.example.fc.email.model.EmailVerification">
+        update email_verification set verified = 1 where email =#{email} and verifying_code =#{verifyingCode}
+    </update>
+
+
+</mapper>

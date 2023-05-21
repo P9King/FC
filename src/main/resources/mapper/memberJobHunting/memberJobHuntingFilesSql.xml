@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.fc.memberJobHunting.memberJobHuntingDao.MemberJobHuntingFilesDao">
+
+    <insert id="insertJobHuntingFiles" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingFilesVo">
+        insert into job_hunting_files(member_board, original_file_name, stored_file_name, save_path) values (#{memberBoard}, #{originalFileName}, #{storedFileName}, #{savePath});
+    </insert>
+
+    <select id="findAllFilesByMemberBoard" parameterType="java.lang.Long" resultType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingFilesVo">
+        select * from job_hunting_files where member_board = #{memberBoard}
+    </select>
+</mapper>

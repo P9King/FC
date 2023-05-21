@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+
+<div layout:fragment="content" class="container">
+    <!--  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+    <form action="/epLogin" method="get">
+        <table width="800">
+            <div class="text-end">
+
+                <table th:if="${session.emailFind}" class="register" height="150">
+                        <tr>
+                            <td><b>[이메일 찾기]</b></td>
+                        <tr>
+                        <tr>
+                            <td><b>[[${session.emailFind.name}]] 의 정보입니다.</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>이메일 정보:</b></td>
+                            <td>[[${session.emailFind.email}]]</td>
+                        </tr>
+                </table>
+
+
+                <table th:if="${session.passwordFind}" class="register" height="150">
+                        <tr>
+                            <td><b>[이메일 찾기]</b></td>
+                        <tr>
+                        <tr>
+                            <td><b>[[${session.passwordFind.name}]] 의 정보입니다.</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>비밀번호 정보:</b></td>
+                            <td>[[${session.passwordFind.password}]]</td>
+                        </tr>
+                </table>
+
+                <button type="submit" class="btn btn-success">로그인 하러가기</button>
+            </div>
+        </table>
+    </form>
+
+</div>
+</html>

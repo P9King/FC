@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<div layout:fragment="content">
+    <div class="container">
+
+        <form class="erSearchForm" action="/epRecruit/epRecruitList" method="get">
+            <select class="stack" name="stack">
+                <option value=>기술 선택</option>
+                <option value="java">java</option>
+                <option value="javascript">javascript</option>
+                <option value="mysql">mysql</option>
+                <option value="oracle">oracle</option>
+                <option value="mariaDB">mariaDB</option>
+                <option value="spring">spring</option>
+                <option value="springboot">springboot</option>
+                <option value="myBatis">myBatis</option>
+                <option value="jpa">jpa</option>
+                <option value="thymeleaf">thymeleaf</option>
+                <option value="bootstrap">bootstrap</option>
+            </select>
+            <button class="submit" type="submit"></button>
+            <input class="title" type="text" name="title" placeholder="프로젝트 제목 검색">
+        </form>
+
+        <div class="listImg">
+            <i class="fa-solid fa-angle-down" style="color: #4875ef;"></i>
+        </div>
+
+        <ul class="recruitUl">
+            <li class="recruitLi" th:each="list : ${list}">
+                <div class="text-center" th:if="${list.fileAttached} == 1">
+                    <img class="rounded" th:src="@{/epRecruit/} + ${ep.getThumbnailFileName()}">
+                </div>
+                <div class="period">
+                    <span th:text="'마감일 | ' + ${list.getShowingPeriod().substring(0, 10)}"></span>
+                </div>
+                <div class="title">
+                    <a class="" th:href="@{/jobHunting/jobHuntingPoster(memberBoard=${list.memberBoard})}" th:text="${ list.title}"></a>
+                </div>
+                <div class="addr">
+                    <span class="" th:text="${ list.getAddr() }"></span>
+                </div>
+                <div class="stack " th:if="${list.stack }">
+                        <span class="stackItem badge text-bg-primary " th:each="stack : ${ list.getStack().split(',') }"
+                              th:text="${ stack } "></span>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+
+    <div class="d-flex justify-content-center my-5" th:if="${!list.isEmpty()}">
+        <!-- 전역 변수 선언 -->
+        <nav th:with="pageNumber = ${list.pageable.pageNumber}, pageSize = ${list.pageable.pageSize},totalPages = ${list.totalPages},startPage = ${T(java.lang.Math).floor(pageNumber / 10) * 10 + 1},tempEndPage = ${startPage + 9 < list.totalPages ? startPage + 9 : list.totalPages },endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+             aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- 처음으로 이동 -->
+                <li th:classappend="${list.first} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/jobHunting/jobHuntingList(page=0)}">
+                        <span>&laquo;</span>
+                        <!--                            <span class="sr-only">맨앞</span>-->
+                    </a>
+                </li>
+
+                <!-- 이전으로 이동 -->
+                <li th:classappend="${list.first} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:href="${list.first} ? '#' : @{/jobHunting/jobHuntingList(page=${pageNumber - 1})}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                        <!--                            <span class="sr-only">이전</span>-->
+                    </a>
+                </li>
+
+                <!-- 특정 페이지로 이동 -->
+                <li th:each="page: ${#numbers.sequence(startPage, tempEndPage)}"
+                    th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                    <a th:text="${page}" class="page-link"
+                       th:href="@{/jobHunting/jobHuntingList(page=${page - 1})}"></a>
+                </li>
+
+                <!-- 다음으로 이동 -->
+                <li th:classappend="${list.last} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:href="${list.last} ? '#' : @{/jobHunting/jobHuntingList(page=${pageNumber + 1})}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&gt;</span>
+                        <!--                            <span class="sr-only">다음</span>-->
+                    </a>
+                </li>
+
+                <!-- 마지막으로 이동 -->
+                <li th:classappend=" ${list.last} ? 'disabled'"
+                    class="page-item">
+                    <a class="page-link" th:href="@{/jobHunting/jobHuntingList(page=${totalPages - 1})}">
+                        <span>&raquo;</span>
+                        <!--                            <span class="sr-only">맨뒤</span>-->
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<th:block layout:fragment="css">
+    <!--        필터 시작-->
+    <style>
+        .content {
+            font-family: 'NanumSquare','NanumBarunGothic', 'NanumSquareNeo','NanumGothic', "Malgun Gothic", dotum, gulim, sans-serif;
+
+        }
+
+        .erSearchForm {
+            border-bottom: #4875ef solid 3px;
+            padding: 10px 10px;
+            border-radius: 10px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+        }
+
+        .erSearchForm > .stack {
+            /*border: #c3c3c4 solid 1px;*/
+            /*box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
+            border: none;
+            /*border-radius: 5px;*/
+        }
+
+        .erSearchForm > .stack:focus-visible {
+            outline-style: none;
+        }
+
+        .erSearchForm > .title {
+            float: right;
+            border: none;
+        }
+
+        .erSearchForm > .title:focus-visible {
+            outline-style: none;
+        }
+
+        .erSearchForm > .submit {
+            float: right;
+        }
+
+        .listImg {
+            text-align: center;
+        }
+
+        .listImg > i {
+            color: #4875ef;
+            font-size: 40px;
+        }
+
+        .recruitUl {
+
+        }
+
+        .recruitLi {
+            border-right: #4875ef solid 5px;
+            padding: 20px 20px;
+            border-radius: 10px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            margin-bottom: 20px;
+        }
+
+        .recruitLi > .period {
+            float: right;
+        }
+
+        .recruitLi > .title {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            height: 60px;
+        }
+
+        .recruitLi > .title > a {
+            color: #171717;
+            font-size: 20px;
+            letter-spacing: 1px;
+            padding-top: 10px;
+            min-height: 120px;
+            font-weight: bold;
+            text-overflow: ellipsis; /* 텍스트길이가 넘어가면 ... 표시 */
+            -webkit-line-clamp: 1; /* 보여줄 텍스트 줄 수 */
+        }
+
+        .epList {
+            border: #adb5bd solid 2px;
+            border-radius: 15px;
+            padding: 15px 15px;
+        }
+
+        .period > span {
+            color: #636464;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .addr > span {
+            color: #636464;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .stack > div {
+            /*color: #00beea;*/
+            font-weight: bold;
+            font-size: 17px;
+            padding: 5px 15px;
+        }
+
+        .stack > .stackItem {
+            font-family: 'NanumSquareNeo', "Malgun Gothic", dotum, gulim, sans-serif;
+
+            margin: 2px 2px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+    </style>
+    <!--        필터 끝    -->
+</th:block>
+<!--    <th:block layout:fragment="script">-->
+<script th:inline="javascript">
+    console.log("Aa")
+</script>
+<!--    </th:block>-->
+</div>
+
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}" xmlns="http://www.w3.org/1999/html">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<head>
+    <style>
+        content {
+            justify-content: center;
+            text-align: -webkit-center;
+        }
+        h1 {
+            text-align: -webkit-center;
+            justify-content: center;
+        }
+        .wrap_title_box {
+            margin-left: 300px;
+            display: block;
+            text-align: -webkit-center;
+            justify-content: center;
+        }
+
+        .wrap_title {
+            position: absolute;
+            margin-left: 50px;
+            display: inline-block;
+            text-align: -webkit-center;
+            justify-content: center;
+        }
+        .my_notification {
+            position: relative;
+            text-align: -webkit-center;
+            justify-content: center;
+        }
+        .btn_setting job_state{
+            margin-left: -400px;
+
+        }
+
+    </style>
+    <link th:href="@{/css/myPageForm.css}" rel="stylesheet">
+
+</head>
+
+
+<div layout:fragment="content">
+    <div id="sri_wrap">
+        <div id="content">
+            <div class="wrap_my_home">
+                <div class="wrap_title_box">
+                    <h1 class="wrap_title">
+                        <strong>[[${session.memberLogin.nickName}]]님</strong></h1>
+                    <div class="toolTipWrap">
+                        <button type="button" class="btn_setting job_state"
+                                onclick="location.href='/modify'"  style="margin-left: -200px;">내 정보 수정
+                        </button>
+
+                        <div id="wrap_notification">
+                            <div class="my_notification">
+                                <ul class="tabWrap">
+                                    <li class="select">
+                                        <button type="button" class="tab">지원 현황<span
+                                                class="badge">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="tab">기업의 요청<span
+                                                class="badge">0</span></button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="tab">나의 문의 현황<span
+                                                class="badge">0</span></button>
+                                    </li>
+                                </ul>
+                                <div class="wrap_cards">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

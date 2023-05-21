@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.chat.chatDao.ChatDao">
+
+    <!--member-->
+    <select id="findMemberRoomById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from chat_room where member_id = #{memberRoom}
+    </select>
+
+    <!--개인회원 채팅방 생성-->
+    <insert id="createMemberRoom" parameterType="java.lang.Integer">
+        insert into chat_room (member_id) values (#{memberRoom})
+    </insert>
+
+    <!--개인회원 채팅 메세지 저장-->
+    <insert id="insertMemberMsg" parameterType="com.example.fc.chat.chatVo.ChatMessageVo">
+        insert into chat_detail (chat_room, section, role, sender, chat_detail) values (#{memberRoom}, #{section}, #{role}, #{sender}, #{content})
+    </insert>
+
+    <!--개인회원 채팅내역-->
+    <select id="findMemberChatHistory" parameterType="java.util.HashMap" resultType="com.example.fc.chat.chatVo.ChatDetailVo">
+        select * from chat_detail where chat_room =#{memberRoom} and section ='member' order by chat_time asc
+    </select>
+
+    <!--최근 채팅방 불러오기-->
+    <select id="findAllMemberChat" resultType="com.example.fc.chat.chatVo.ChatDetailVo">
+        SELECT og.chat_room, og.chat_time, og.chat_detail
+        FROM chat_detail og
+                 INNER JOIN (
+            SELECT chat_room, MAX(chat_time) AS max_chat_time
+            FROM chat_detail
+            where role = 'member'
+            GROUP BY chat_room
+        ) latest_chat ON og.chat_room = latest_chat.chat_room AND og.chat_time = latest_chat.max_chat_time
+        ORDER BY og.chat_time DESC
+    </select>
+
+    <!--ep-->
+    <select id="findEpRoomById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from chat_room where ep_id = #{epRoom}
+    </select>
+
+    <!--ep 채팅방 생성-->
+    <insert id="createEpRoom" parameterType="java.lang.Integer">
+        insert into chat_room (ep_id) values (#{epRoom})
+    </insert>
+
+    <!--ep 메세지 저장-->
+    <insert id="insertEpMsg" parameterType="com.example.fc.chat.chatVo.ChatMessageVo">
+        insert into chat_detail (chat_room, section, role, sender, chat_detail) values (#{epRoom}, #{section} , #{role}, #{sender}, #{content})
+    </insert>
+
+    <!--ep 채팅 내역-->
+    <select id="findEpChatHistory" parameterType="java.util.HashMap" resultType="com.example.fc.chat.chatVo.ChatDetailVo">
+        select * from chat_detail where chat_room =#{epRoom} and section =#{section} order by chat_time asc
+    </select>
+
+    <!--최근 채팅방 불러오기-->
+    <select id="findAllEpChat" resultType="com.example.fc.chat.chatVo.ChatDetailVo">
+        SELECT og.chat_room, og.chat_time, og.chat_detail
+        FROM chat_detail og
+                 INNER JOIN (
+            SELECT chat_room, MAX(chat_time) AS max_chat_time
+            FROM chat_detail
+            where role = 'ep'
+            GROUP BY chat_room
+        ) latest_chat ON og.chat_room = latest_chat.chat_room AND og.chat_time = latest_chat.max_chat_time
+        ORDER BY og.chat_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+<head>
+    <style>
+        .stack {
+            display: flex;
+        }
+
+        .submitDiv {
+            display: flex;
+            justify-content: flex-end; /* Changed to "flex-end" */
+        }
+
+        .inputInfo {
+            width: 750px;
+        }
+
+        .myStacks {
+            width: 634px;
+        }
+
+        .textAreaInfo {
+            width: 750px;
+            height: 500px;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<!--th:block 해주어야 자바스크립트에서 세션의 사용이가능하다 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let name1 = [[${session.epLogin.name}]];
+
+        function contentChk() {
+            let title = $("#title").val();
+            if (title == '' || title == undefined) {
+                alert('제목을 입력해주세요');
+                return false;
+            } else if (title.length > 45) {
+                alert('제목이 45자가 넘었습니다.');
+                return false;
+            }
+
+            let detail = $("#detail").val();
+            if (detail == '' || detail == undefined) {
+                alert('내용을 입력해주세요');
+                return false;
+            } else if (detail.length > 500) {
+                alert('내용이 500자가 넘었습니다.');
+                return false;
+            }
+
+            alert(name1+'에서 남긴 문의글은 기업페이지에서 확인 가능합니다.')
+            $("#piSubmit").submit();
+        }
+
+    </script>
+</th:block>
+<body>
+<div layout:fragment="content" class="container">
+    <form action="/personalInquire" method="post" id="piSubmit">
+        <input type="hidden" th:if="${session.epLogin}" name="email" th:value="${session.epLogin.email}"/>
+
+        <table>
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" name="title" id="title" class="inputInfo">
+                </td>
+            </tr>
+            <tr>
+                <th>카테고리: &nbsp;</th>
+                <td>
+                    <input type="radio" id="일반" name="categories" value="일반" checked>
+                    <label for="일반">일반</label>
+
+                    <input type="radio" id="불편/신고" name="categories" value="불편/신고">
+                    <label for="불편/신고">불편/신고</label>
+
+                    <input type="radio" id="구직자 신고" name="categories" value="구직자 신고">
+                    <label for="구직자 신고">구직자 신고</label>
+
+                    <input type="radio" id="기타문의" name="categories" value="기타문의">
+                    <label for="기타문의">기타문의</label>
+                </td>
+            </tr>
+            <tr>
+                <th>상세내용</th>
+                <td>
+                    <textarea name="detail" id="detail" class="textAreaInfo"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <br>
+                    <div class="submitDiv">
+                        <!-- <button style="margin-left: 280px" type="submit" class="btn btn-primary">첨부파일</button>&nbsp; -->
+                        <button type="button" class="btn btn-success" onclick="contentChk();">문의
+                            하기
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

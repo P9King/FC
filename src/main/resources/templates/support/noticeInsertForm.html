@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .stack {
+            display: flex;
+        }
+
+        .submitDiv {
+            display: flex;
+            justify-content: end;
+        }
+
+        .inputInfo {
+            width: 750px;
+        }
+
+        .myStacks {
+            width: 634px;
+        }
+
+        .textAreaInfo {
+            width: 750px;
+            height: 500px;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<div layout:fragment="content" class="container">
+    <table>
+        <form action="/noticeInsert" method="post" enctype="multipart/form-data">
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" name="title" class="inputInfo">
+                </td>
+            </tr>
+            <tr>
+                <div>
+                    <th>구분</th>
+                    <td>
+                        <input type="radio" id="public" name="sortation" value="공지사항" checked>
+                        <label for="public">공지사항</label>
+                        <input type="radio" id="private" name="sortation" value="이벤트">
+                        <label for="private">이벤트</label>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <th>상세내용</th>
+                <td>
+                    <textarea class="textAreaInfo" id="detail" name="detail"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <br>
+                    <div class="submitDiv">
+                        <button type="submit" class="btn btn-success">게시글 등록</button>
+                    </div>
+                </td>
+            </tr>
+        </form>
+    </table>
+
+    <th:block layout:fragment="css">
+        <link th:rel="stylesheet" th:href="@{/css/summernote/summernote-lite.min.css}">
+    </th:block>
+
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/summernote/summernote-lite.min.js}"></script>
+        <script th:src="@{/js/summernote/lang/summernote-ko-KR.min.js}"></script>
+        <script th:inline="javascript">
+
+            $('#detail').summernote({
+                // 에디터 높이
+                height: 500,
+                // 에디터 한글 설정
+                lang: "ko-KR",
+                // 에디터에 커서 이동 (input창의 autofocus라고 생각)
+                focus: false,
+                toolbar: [
+                    // 글자 크기 설정
+                    ['style', ['style']],
+                    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    // 글자색
+                    ['color', ['forecolor', 'color']],
+                    // 표만들기
+                    ['table', ['table']],
+                    // 글머리 기호, 번호매기기, 문단정렬
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    // 줄간격
+                    ['height', ['height']],
+                    // 링크, 사진, 비디오
+                    ['insert', ['link', 'picture', 'video']],
+                    // 코드보기, 확대해서보기, 도움말
+                    ['view', ['help']]
+                ],
+                callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+                    onImageUpload: function (files) {
+                        uploadSummernoteImageFile(files[0], this);
+                    },
+                    onPaste: function (e) {
+                        var clipboardData = e.originalEvent.clipboardData;
+                        if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                            var item = clipboardData.items[0];
+                            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                }
+            });
+
+            /**
+             * 이미지 파일 업로드
+             */
+            function uploadSummernoteImageFile(file, editor) {
+                data = new FormData();
+                data.append("file", file);
+                $.ajax({
+                    data : data,
+                    type : "POST",
+                    url : "/uploadSummernoteImageFile",
+                    contentType : false,
+                    processData : false,
+                    success : function(data) {
+                        //항상 업로드된 파일의 url이 있어야 한다.
+
+                        console.log(data.url)
+                        $(editor).summernote('insertImage', data.url);
+                    }
+                });
+            }
+        </script>
+    </th:block>
+
+</div>
+</html>

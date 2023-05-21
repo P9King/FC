@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.epRecruit.epRecruitDao.EpRecruitStackDao">
+
+    <!-- 기업 > 모집 공고 스택 Insert -->
+    <insert id="epRecruitStackSave" parameterType="com.example.fc.epRecruit.epRecruitVo.EpRecruitStackVO">
+        INSERT INTO ep_recruit_stack(ep_board, ep_id, stack)
+        VALUES ( #{epBoard}, #{epId},  #{stack} );
+    </insert>
+
+    <!-- 기업 > 모집 공고 스택 리스트 -->
+    <select id="findEpRecruitStacksByBoard" parameterType="java.lang.Long" resultType="com.example.fc.epRecruit.epRecruitVo.EpRecruitStackVO">
+        select * from ep_recruit_stack where ep_board = #{epBoard};
+    </select>
+
+    <delete id="epRecruitStackDeleteById" parameterType="java.lang.Long">
+        delete from ep_recruit_stack where ep_board = #{epBoard};
+    </delete>
+
+
+
+
+
+</mapper>

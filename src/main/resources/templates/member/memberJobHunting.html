@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .stack {
+            display: flex;
+        }
+
+        .submitDiv {
+            display: flex;
+            justify-content: end;
+        }
+
+        .inputInfo {
+            width: 750px;
+        }
+
+        .myStacks {
+            width: 634px;
+        }
+
+        .textAreaInfo {
+            width: 750px;
+            height: 500px;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<div layout:fragment="content" class="container">
+    <table>
+        <form action="/memberJobHuntingForm" method="post" enctype="multipart/form-data">
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" name="title" class="inputInfo">
+                </td>
+            </tr>
+
+            <!-- onchange를 적용하여 옵션 벨류 값을 얻음. 얻어진 value는 fetch를 이용하여 값을 넘김-->
+            <tr>
+                <div class="stack">
+                    <th> 기술스택</th>
+                    <td>
+                        <select onchange="selectStack(this)" class="selection">
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="TypeScript">TypeScript</option>
+                            <option value="Vue">Vue</option>
+                            <option value="Nodejs">Nodejs</option>
+                            <option value="Spring">Spring</option>
+                            <option value="Java">Java</option>
+                            <option value="Nextjs">Nextjs</option>
+                            <option value="Nestjs">Nestjs</option>
+                            <option value="Express">Express</option>
+                            <option value="Go">Go</option>
+                            <option value="C">C</option>
+                            <option value="Python">Python</option>
+                            <option value="Django">Django</option>
+                            <option value="Swift">Swift</option>
+                            <option value="Kotlin">Kotlin</option>
+                            <option value="MySQL">MySQL</option>
+                            <option value="MongDB">MongDB</option>
+                            <option value="php">php</option>
+                            <option value="GraphQL">GraphQL</option>
+                            <option value="Firebase">Firebase</option>
+                            <option value="ReactNative">ReactNative</option>
+                            <option value="Unity">Unity</option>
+                            <option value="Flutter">Flutter</option>
+                            <option value="AWS">AWS</option>
+                            <option value="Kubernetes">Kubernetes</option>
+                            <option value="Docker">Docker</option>
+                            <option value="Git">Git</option>
+                            <option value="Figma">Figma</option>
+                            <option value="Zeplin">Zeplin</option>
+                        </select>
+
+                        <input type="text" class="myStacks" name="stack" placeholder="본인의 기술을 골라주세요." readonly/>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <div>
+                    <th>희망 계약 기간</th>
+                    <td>
+                        <input type="radio" id="3month" name="period" value="3개월">
+                        <label for="3month">3개월 이하</label>
+
+                        <input type="radio" id="6month" name="period" value="6개월" checked>
+                        <label for="6month">6개월 이하</label>
+
+                        <input type="radio" id="12month" name="period" value="12개월">
+                        <label for="12month">12개월 이하</label>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <div>
+                    <th>모집상태</th>
+                    <td>
+                        <input type="radio" id="public" name="hunting" value="공개">
+                        <label for="public">공개</label>
+                        <input type="radio" id="private" name="hunting" value="비공개" checked>
+                        <label for="private">비공개</label>
+                    </td>
+                </div>
+            </tr>
+
+            <tr>
+                <div>
+                    <th>성별</th>
+                    <td>
+                        <input type="radio" id="any" name="gender" value="무관" checked>
+                        <label for="any">무관</label>
+
+                        <input type="radio" id="male" name="gender" value="남성">
+                        <label for="male">남성</label>
+
+                        <input type="radio" id="female" name="gender" value="여성">
+                        <label for="female">여성</label>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <div>
+                    <th>계약금</th>
+                    <td>
+                        <div>
+                            <input type="text" name="payment" class="inputInfo">만원
+                        </div>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <th>상세내용</th>
+                <td>
+                    <textarea class="textAreaInfo" name="detail"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>파일업로드</th>
+                <td>
+                    <input type="file" class="inputInfo" name="file" multiple/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="submitDiv">
+                        <!--<input type="submit" value="올리기" onclick="submitData()">-->
+                        <input type="submit" value="올리기">
+                    </div>
+                </td>
+            </tr>
+        </form>
+    </table>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*게시판에서 기술 선택 js*/
+
+        // ('.myStacks').value;
+        function selectStack() {
+            let stackValue = document.getElementsByClassName('myStacks')[0];
+            let selection = document.querySelector('.selection');
+            let stack = selection.options[selection.selectedIndex].value;
+            console.log(stack);
+            stackValue.value += stack + " ";
+        }
+
+
+        /*   async function submitData() {
+               /!*form 데이터를 보내기위 한 변수 설정*!/
+               const data = document.querySelector('#jobHuntingData');
+               const formData = new FormData(data);
+               const payload = new URLSearchParams(formData);
+               fetch('/memberJobHuntingForm', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                   },
+                   body: payload
+               }).then(result => result.text()).then(data => {
+                   if (data == "게시글이 작성되었습니다.") {
+                       alert(data);
+                   }
+                   if (data == "게시글 작성 실패.") {
+                       alert(data);
+                   }
+               });
+           }*/
+    </script>
+</th:block>
+</html>

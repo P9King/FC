@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+
+
+<head>
+    <style>
+        .content {
+            justify-content: center;
+            text-align: center;
+            text-align: -webkit-center;
+        }
+        .textinput {
+            border : black solid 1px;
+            border-radius: 7px;
+            width: 300px;
+            height: 35px;
+        }
+
+        .textlabel {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .register {
+            height: 70px;
+        }
+
+        .btnbtn {
+            background: gray;
+            color: white;
+            font-size: 12px;
+        }
+
+        .addrtext {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 120px; font-size: 15px
+        }
+
+        .addrtext2 {
+            border-radius: 7px; border: solid black 1px; height: 30px; width: 300px; font-size: 15px
+        }
+
+    </style>
+</head>
+
+
+<div layout:fragment="content">
+    <form  method="post">
+        <table width="800">
+            <tr height="40">
+                <td align="center" style="font-size: 30px;"><b>기업 정보수정</b></td>
+            </tr>
+            <tr>
+                <td align="right" style="color: gray"><b>* 필수 입력 사항</b></td>
+            </tr>
+        </table>
+        <table width="700" height="600" cellpadding="0" style="border-collapse:collapse; font-size:9pt; margin-left: 120px">
+        <tr class="register" height="30">
+            <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">Email</td>
+                <td><input class="textinput"  type="text" name="email" th:value="${session.epLogin.email}" readonly="readonly"  required />&nbsp;
+            </tr>
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">기 업 명</td>
+                <td><input class="textinput" type="text" name="name" th:value="${session.epLogin.name}" required /></td>
+            </tr>
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호</td>
+                <td><input class="textinput"  type="password" name="password" id="pw"  required/></td>
+            </tr>
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">비밀번호 확인</td>
+                <td><input class="textinput" type="password" name="" id="pwCheck"  required/>&nbsp;&nbsp;<span
+                        id="same"></span></td>
+            </tr>
+
+
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel" width="15%">사업자 번호</td>
+                <td><input class="textinput" type="text" name="bnNumber" th:value="${session.epLogin.bnNumber}" required/></td>
+            </tr>
+            <tr class="register" height="30">
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"  width="15%">대표 번호</td>
+                <td><input  class="textinput"  type="tel" name="phone" th:value="${session.epLogin.phone}" required/></td>
+            </tr>
+
+            <tr>
+                <td width="5%" align="right" style="padding: 0 3px; font-size: 20px">*</td>
+                <td class="textlabel"s width="15%">회 사 주 소</td>
+                <td>
+                    <input class="addrtext" type="text" size="10" name="Addr" id="sample4_postcode" placeholder="     우편번호" readonly="readonly" required>
+                    <input class="btn btn-secondary btnbtn"  type="button" onclick="searchAddr()" value="주소찾기"><br><br>
+                    <!--          <input type="button" onclick="window.open('/addrSearch' ,' _blank','width=569, height=553,top=300,left=600 '); return false;" value="주소찾기"><br>-->
+                    <input class="addrtext2" type="text" size="30" name="zipNo" id="sample4_roadAddress" placeholder="  도로명주소" readonly="readonly" required>
+                    <br/><span id="guide" style="color:#999;font-size:10px;"></span>
+                    <br/><input class="addrtext2" type="text" name="wRestAddress" placeholder="  나머지 주소" id="addr1" size="70" required/>
+                </td>
+            </tr>
+
+        </table>
+        <br/>
+        <table>
+            <tr height="40">
+                <td>
+<!--                     <input type="hidden" name="role" value="일반"/>-->
+<!--                    &lt;!&ndash; href 로 경로를 지정해줄때는 controller로 매핑시켜놓은것으로 적어준다&ndash;&gt;-->
+<!--                    <button type="submit" class="btn btn-success">수정하기</button>-->
+                    <input type="submit" class="btn btn-success" style="   margin-right: 140px;" value="수정하기"  id="submitBtn" formaction="/epModify" method="post">
+                    <input type="submit" class="btn btn-danger"  value="탈퇴하기" formaction="/epDelete" method="post" onclick="alert('회원탈퇴에 성공했습니다~!')">
+                </td>
+            </tr>
+        </table>
+    </form>
+<!--    <form action="/epDelete" method="post">-->
+<!--        <input type="hidden" name="role" th:value="${session.epLogin.email}"/>-->
+<!--        <button type="submit" class="btn btn-success">삭제하기</buttosn>-->
+<!--    </form>-->
+
+</div>
+</html>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            let addr = [[${session.epLogin.addr}]].split('|');
+            console.log(addr);
+
+            if (addr[0] != '') $("#sample4_postcode").val(addr[0]);
+            if (addr[1] != '') $("#sample4_roadAddress").val(addr[1]);
+            if (addr[2] != '') $("#addr1").val(addr[2]);
+
+        });
+
+        function searchAddr() {
+            var childWindow = window.open("addrSearch", "Child Window", "width=400,height=300");
+            return false;
+        }
+        function receiveAddressValues(roadAddr, zipNo) {
+            // Set the received address values in the parent window
+            document.getElementById("sample4_postcode").value = zipNo;
+            document.getElementById("sample4_roadAddress").value = roadAddr;
+
+        }
+
+        $('#submitBtn').click(function () {
+            // 비밀번호
+            if ($("#pw").val() !== $("#pwCheck").val()) {
+                alert('비밀번호가 동일하지 않습니다.');
+                return false;
+            }
+        });
+    </script>
+</th:block>

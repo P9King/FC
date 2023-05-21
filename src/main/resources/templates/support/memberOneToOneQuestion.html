@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" charset="utf-8"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">  <!-- 공통 양식으로 만들었던 layout 호출 -->
+<head>
+    <style>
+        .stack {
+            display: flex;
+        }
+
+        .submitDiv {
+            display: flex;
+            justify-content: flex-end; /* Changed to "flex-end" */
+        }
+
+        .inputInfo {
+            width: 750px;
+        }
+
+        .myStacks {
+            width: 634px;
+        }
+
+        .textAreaInfo {
+            width: 750px;
+            height: 500px;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <form action="/personalInquire" method="post">
+        <input type="hidden" th:if="${session.memberLogin}" name="email" th:value="${session.memberLogin.email}"/>
+        <input type="hidden" th:if="${session.epLogin}" name="email" th:value="${session.epLogin.email}"/>
+
+        <table>
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" name="title" class="inputInfo">
+                </td>
+            </tr>
+            <tr>
+                <th>카테고리: &nbsp; </th>
+                <td>
+                    <input type="radio" id="일반" name="categories" value="일반" checked>
+                    <label for="일반">일반</label>
+
+                    <input type="radio" id="불편/신고" name="categories" value="불편/신고">
+                    <label for="불편/신고">불편/신고</label>
+
+                    <input type="radio" id="회사신고" name="categories" value="회사신고">
+                    <label for="회사신고">회사신고</label>
+
+                    <input type="radio" id="기타문의" name="categories" value="기타문의">
+                    <label for="기타문의">기타문의</label>
+                </td>
+            </tr>
+            <tr>
+                <th>상세내용</th>
+                <td>
+                    <textarea name="detail" class="textAreaInfo"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <br>
+                    <div class="submitDiv">
+                        <!-- <button style="margin-left: 280px" type="submit" class="btn btn-primary">첨부파일</button>&nbsp; -->
+                        <button type="submit" class="btn btn-success">문의 하기</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

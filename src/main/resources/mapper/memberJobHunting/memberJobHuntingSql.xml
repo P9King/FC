@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fc.memberJobHunting.memberJobHuntingDao.MemberJobHuntingDao">
+
+    <!--사용자 정보 찾기-->
+    <select id="findMemberById" parameterType="java.lang.Long" resultType="com.example.fc.member.memberVo.MemberVo">
+        select * from member where id = #{memberId}
+    </select>
+
+    <!--게시글 등록-->
+    <insert id="insertJobHunting" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingVo">
+        insert into job_hunting(title, member_id, stack, showing_period, recruit_condition, gender, payment, work_day_start, work_day_end, addr, detail, create_date, update_date, file_attached)
+        VALUES (#{title}, #{memberId}, #{stack}, #{showingPeriod}, #{recruitCondition}, #{gender}, #{payment}, #{workDayStart}, #{workDayEnd}, #{addr}, #{detail}, now(), now(), #{fileAttached});
+    </insert>
+
+    <!--게시글 정보 찾기-->
+    <select id="findJobHuntingMemberBoard" resultType="java.lang.Integer">
+        select member_board from job_hunting where title = #{title} and detail = #{detail};
+    </select>
+
+    <!--게시글에 해당 되는 스택 저장-->
+    <insert id="insertMemberStack" parameterType="java.util.HashMap">
+        insert into member_stack (member_board, stack, member_id) values (#{stringMemberBoard}, #{stack}, #{memberId});
+    </insert>
+
+    <!--게시글 모두 불러오기 페이징을 위함-->
+    <select id="findAllJobHunting" resultType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingVo">
+        select * from job_hunting order by create_date desc
+    </select>
+
+    <!--해당 게시글 모든 정보 찾기-->
+    <select id="findAllByMemberBoard" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingVo" resultType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingVo">
+        select * from job_hunting where member_board = #{memberBoard}
+    </select>
+
+    <!--게시글의 모든 해당 스택 찾기-->
+    <select id="findAllStacksByMemberBoard" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingStackVo" resultType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingStackVo">
+        select * from member_stack where member_board = #{memberBoard}
+    </select>
+
+    <!--게시글 수정하기 -->
+    <update id="updateJobHuntingBoard" parameterType="com.example.fc.memberJobHunting.memberJobHuntingVo.MemberJobHuntingVo">
+        update job_hunting
+        set title = #{title}, stack = #{stack}, showing_period =#{showingPeriod}, recruit_condition = #{recruitCondition}, gender = #{gender}, payment = #{payment}, work_day_start = #{workDayStart}, work_day_end = #{workDayEnd}, addr= #{addr}, detail= #{detail}, update_date = now()
+        where member_board = #{memberBoard}
+    </update>
+
+    <!--게시글 삭제하기-->
+    <delete id="deleteMemberBoardByMemberBoard" parameterType="java.lang.Long">
+        delete from job_hunting where member_board = #{memberBoard}
+    </delete>
+
+
+</mapper>
